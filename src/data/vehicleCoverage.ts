@@ -148,7 +148,7 @@ export const vehicleCoverageItems: VehicleCoverageItem[] = [
   {
     brand: 'Honda',
     model: 'CR-V, Accord, Civic, Pilot, Prologue',
-    label: 'Honda CR-V / Accord / Civic',
+    label: 'Honda CR-V / Accord / Civic (not Passport)',
     href: '/google-built-in-car-models/#us-popular-models',
     platform: 'Check platform first',
     evidence: 'Popular US models; Passport has a dedicated Google built-in guide',
