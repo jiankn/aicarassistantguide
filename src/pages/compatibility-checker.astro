@@ -1,0 +1,362 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { supportMatrix, comparisonRows } from '../data/supportMatrix';
+import { getPage } from '../data/pages';
+import { site } from '../data/site';
+
+const page = getPage('compatibility-checker');
+const toolPills = [
+  { label: 'Model coverage', href: '/google-built-in-car-models/' },
+  { label: 'GM with Google built-in', href: '/gm-gemini-update/' },
+  { label: 'Volvo models', href: '/volvo-gemini-supported-models/' },
+  { label: 'iPhone with CarPlay', href: '/chatgpt-carplay-requirements/' },
+  { label: 'Android Auto', href: '/does-gemini-work-with-android-auto/' },
+  { label: 'Latest rollout notes', href: '/update-tracker/' }
+];
+const setupChoices = [
+  { label: 'Vehicle system', text: 'The assistant appears inside the car system or Google built-in dashboard.', href: '#vehicle-system' },
+  { label: 'iPhone / CarPlay', text: 'You connect an iPhone and expect ChatGPT, Siri, or app handoff in CarPlay.', href: '#iphone-carplay' },
+  { label: 'Android phone', text: 'You use Android Auto or the Google app from a phone-projection session.', href: '#android-phone' },
+  { label: 'Not sure', text: 'You see multiple logos or cannot tell whether the car or phone runs the assistant.', href: '#not-sure' }
+];
+const problemChoices = [
+  { label: 'Exact model lookup', href: '/google-built-in-car-models/' },
+  { label: 'Assistant not showing', href: '/why-is-gemini-not-showing-in-my-gm-car/' },
+  { label: 'Requirements check', href: '/chatgpt-carplay-requirements/' },
+  { label: 'Platform comparison', href: '/google-built-in-vs-android-auto/' },
+  { label: 'Rollout timing', href: '/update-tracker/' }
+];
+const resultCards = [
+  {
+    id: 'vehicle-system',
+    label: 'Vehicle system',
+    title: 'Check Google built-in, automaker rollout, and vehicle software first.',
+    text: 'This path is most relevant for GM, Volvo, Polestar, Honda Passport, Lincoln Nautilus, Renault 5, and other cars where the assistant runs from the dashboard instead of the phone.',
+    href: '/google-built-in-car-models/',
+    action: 'Open model coverage guide'
+  },
+  {
+    id: 'iphone-carplay',
+    label: 'iPhone / CarPlay',
+    title: 'Check iOS, ChatGPT app state, Siri handoff, CarPlay connection, and permissions.',
+    text: 'CarPlay AI usually depends on the iPhone and supported app flow, not the vehicle having Google built-in.',
+    href: '/chatgpt-carplay-requirements/',
+    action: 'Open CarPlay requirements guide'
+  },
+  {
+    id: 'android-phone',
+    label: 'Android phone',
+    title: 'Separate Android Auto from Google built-in before you troubleshoot.',
+    text: 'A car can support Android Auto projection and still not have vehicle-native Gemini or Google built-in assistant features.',
+    href: '/does-gemini-work-with-android-auto/',
+    action: 'Open Android Auto AI guide'
+  },
+  {
+    id: 'not-sure',
+    label: 'Not sure',
+    title: 'Start by identifying the layer: car system, iPhone, or Android phone.',
+    text: 'Look for Google built-in branding, CarPlay, Android Auto, account sign-in, language, region, and software update menus.',
+    href: '/google-built-in-vs-android-auto/',
+    action: 'Compare platform differences'
+  }
+];
+const decisionSteps = [
+  {
+    title: 'Look at where the assistant runs',
+    text: 'If the assistant runs from the vehicle system, check Google built-in or automaker rollout pages. If it runs from your phone, check CarPlay or Android Auto.'
+  },
+  {
+    title: 'Separate Google built-in from Android Auto',
+    text: 'A car can support Android Auto and still not have Google built-in. This is the most common source of Gemini confusion.'
+  },
+  {
+    title: 'Check rollout and settings before resets',
+    text: 'For AI car assistants, missing availability is often caused by staged rollout, software, region, language, account, or app permission state.'
+  }
+];
+const parkedChecklist = [
+  'Write down your vehicle brand, exact model, model year, trim, country, and phone platform.',
+  'Check whether the dashboard has Google built-in, CarPlay, Android Auto, or more than one path.',
+  'Install vehicle and phone updates while parked.',
+  'Confirm app/account sign-in, language, region, microphone, and CarPlay or Android Auto permissions.',
+  'Open the linked guide for the platform that matches your setup.'
+];
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || site.url;
+const checkerSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'AI Car Assistant Compatibility Guide',
+  description: page?.description || 'Check AI car assistant compatibility by platform.',
+  url: new URL('/compatibility-checker/', siteUrl).toString(),
+  dateModified: page?.lastUpdated || '2026-05-02'
+};
+const howToSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'How to choose the right AI car assistant guide',
+  description: 'Identify whether your assistant runs from the vehicle system, iPhone CarPlay, or Android Auto, then open the matching checklist.',
+  step: decisionSteps.map((step, index) => ({
+    '@type': 'HowToStep',
+    position: index + 1,
+    name: step.title,
+    text: step.text
+  }))
+};
+---
+<BaseLayout title="AI Car Assistant Compatibility Guide" description={page?.description || 'Check AI car assistant compatibility by platform.'} pathname="/compatibility-checker/" image="/assets/compatibility-map-real.jpg" structuredData={[checkerSchema, howToSchema]}>
+  <section class="tool-portal-hero">
+    <div class="container tool-portal-grid">
+      <div>
+        <p class="eyebrow">Compatibility guide</p>
+        <h1 class="article-title">Find the AI assistant path that fits your car.</h1>
+        <p class="article-description">Start with platform, not hype. This static checker maps your car, phone, and dashboard setup to the right guide without collecting vehicle data.</p>
+        <div class="direct-answer-band">
+          <strong>Quick answer:</strong> If your car has <em>Google built-in</em>, check Gemini eligibility. If you have an <em>iPhone with CarPlay</em>, check ChatGPT setup. If you use <em>Android Auto</em>, note it is phone projection, not vehicle-native AI.
+        </div>
+        <form class="assistant-search tool-search-card" action="/compatibility-checker/" method="get">
+          <span aria-hidden="true">✦</span>
+          <input name="q" type="search" placeholder="Try: Volvo XC90 with Google built-in" aria-label="Describe your vehicle platform" />
+          <button type="submit">Check</button>
+        </form>
+        <p class="tool-privacy-note">No vehicle data is collected. This guide only routes you to the right checklist.</p>
+        <nav class="quick-pill-row utility-pill-row" aria-label="Common compatibility paths">
+          {toolPills.map((pill) => <a href={pill.href}>{pill.label}</a>)}
+        </nav>
+      </div>
+      <aside class="tool-hero-card">
+        <img src="/assets/compatibility-map-real.jpg" alt="Daylight compatibility comparison showing built-in Gemini, CarPlay with Gemini on iPhone, and Android Auto with Gemini on Android" />
+        <div>
+          <strong>Start here</strong>
+          <p>Vehicle-native Google built-in, CarPlay, and Android Auto are different paths.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="compatibility-decision-tool" aria-labelledby="decision-tool-heading">
+    <div class="container">
+      <div class="tool-section-heading">
+        <div>
+          <span>Static decision tool</span>
+          <h2 id="decision-tool-heading">Answer two questions, then open the right guide.</h2>
+        </div>
+      </div>
+      <div class="decision-tool-grid">
+        <div class="decision-question">
+          <span>Step 1</span>
+          <h3>Where does the assistant run?</h3>
+          <div class="choice-grid">
+            {setupChoices.map((choice) => <a href={choice.href}><strong>{choice.label}</strong><p>{choice.text}</p></a>)}
+          </div>
+        </div>
+        <div class="decision-question">
+          <span>Step 2</span>
+          <h3>What are you trying to solve?</h3>
+          <div class="problem-choice-list">
+            {problemChoices.map((choice) => <a href={choice.href}>{choice.label} <span>→</span></a>)}
+          </div>
+        </div>
+      </div>
+      <div class="decision-results" aria-label="Recommended next guides">
+        {resultCards.map((result) => (
+          <article id={result.id} class="decision-result-card">
+            <span>{result.label}</span>
+            <h3>{result.title}</h3>
+            <p>{result.text}</p>
+            <a href={result.href}>{result.action} →</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="checker-dashboard">
+    <div class="container">
+      <div class="tool-section-heading">
+        <div>
+          <span>Choose your closest setup</span>
+          <h2>Research by assistant path</h2>
+        </div>
+        <a href="/methodology/">How we label source confidence</a>
+      </div>
+      <div class="portal-option-grid">
+        {supportMatrix.map((item) => (
+          <a class="assistant-path-card" href={item.href}>
+            <span>{item.platform}</span>
+            <strong>{item.likelyAssistant}</strong>
+            <p>{item.mustCheck}</p>
+            <small>{item.bestNextStep} ↗</small>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="utility-content-section">
+    <div class="container utility-two-col">
+      <div>
+        <div class="tool-section-heading compact">
+          <div>
+            <span>Static matrix</span>
+            <h2>Compare platform requirements before troubleshooting</h2>
+          </div>
+        </div>
+        <h2>Static support matrix</h2>
+        <div class="table-wrap">
+          <table class="matrix">
+            <caption>AI car assistant compatibility paths by platform</caption>
+            <thead><tr><th>Platform</th><th>Likely assistant path</th><th>Must check</th><th>Next step</th></tr></thead>
+            <tbody>{supportMatrix.map((item) => <tr><td><strong>{item.platform}</strong></td><td>{item.likelyAssistant}</td><td>{item.mustCheck}</td><td><a href={item.href}>{item.bestNextStep}</a></td></tr>)}</tbody>
+          </table>
+        </div>
+        <div class="matrix-card-list">
+          {supportMatrix.map((item) => (
+            <a class="matrix-mobile-card" href={item.href}>
+              <span>{item.platform}</span>
+              <strong>{item.likelyAssistant}</strong>
+              <p>{item.mustCheck}</p>
+              <small>{item.bestNextStep} →</small>
+            </a>
+          ))}
+        </div>
+      </div>
+      <aside class="utility-rail">
+        <div class="rail-card">
+          <h2>Short answer</h2>
+          <p>Start by deciding whether your assistant runs from the vehicle system, your iPhone through CarPlay, or your Android phone through Android Auto.</p>
+        </div>
+        <div class="rail-card blue-rail-card">
+          <h2>Safety first</h2>
+          <p>Use this checklist while parked. Do not read or interact with screens while driving.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="utility-content-section soft">
+    <div class="container">
+      <div class="tool-section-heading">
+        <div>
+          <span>Decision flow</span>
+          <h2>Three checks before changing settings</h2>
+        </div>
+      </div>
+      <div class="decision-timeline">
+        {decisionSteps.map((step, index) => (
+          <div class="timeline-step">
+            <span>{index + 1}</span>
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="utility-content-section">
+    <div class="container checklist-showcase">
+      <div class="checklist-left">
+        <span class="mini-brand">Parked checklist</span>
+        <h2>Do these checks before a reset.</h2>
+        <p>Most AI assistant issues come from platform mismatch, rollout timing, account state, language, region, or app permissions.</p>
+        <div class="checklist-stats">
+          <div><strong>5</strong><span>checks</span></div>
+          <div><strong>2 min</strong><span>while parked</span></div>
+          <div><strong>0</strong><span>data collected</span></div>
+        </div>
+        <div class="checklist-next-card">
+          <strong>After the checklist</strong>
+          <p>Open the guide that matches your platform row from the table above. Use that page's requirements table before changing any settings.</p>
+          <a href="/update-tracker/">Check latest rollout status →</a>
+        </div>
+        <p class="checklist-safety">⛑ Complete all checks while parked. Do not read or interact with screens while driving.</p>
+      </div>
+      <ul class="check-list portal-check-list">
+        {parkedChecklist.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="utility-content-section">
+    <div class="container">
+      <div class="tool-section-heading">
+        <div>
+          <span>How to read the result</span>
+          <h2>Confirmed, possible, and not-the-same labels</h2>
+        </div>
+      </div>
+      <div class="fact-grid portal-fact-grid">
+        <div class="fact-card"><span>Confirmed</span><p>If an official automaker, Apple, OpenAI, or Google source names the platform and requirement, treat it as the highest-confidence path.</p></div>
+        <div class="fact-card"><span>Possible</span><p>If users report a feature but official sources do not confirm it, treat it as a signal only and check the update tracker before changing settings.</p></div>
+        <div class="fact-card"><span>Not the same</span><p>Android Auto, Google built-in, and CarPlay can all appear in car-related searches, but they are different technical paths.</p></div>
+        <div class="fact-card"><span>Next action</span><p>Open the guide linked from your row, then use that page’s requirements table before troubleshooting.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="utility-content-section soft">
+    <div class="container">
+      <div class="tool-section-heading">
+        <div>
+          <span>Feature comparison</span>
+          <h2>How AI assistant features differ by platform</h2>
+        </div>
+        <a href="/best-ai-assistants-for-cars/">Full comparison guide</a>
+      </div>
+      <div class="table-wrap">
+        <table class="matrix">
+          <caption>AI car assistant feature comparison across platforms</caption>
+          <thead><tr><th>Feature</th><th>Gemini (Google built-in)</th><th>ChatGPT (CarPlay)</th><th>Google Assistant</th></tr></thead>
+          <tbody>{comparisonRows.map((row) => <tr><td><strong>{row.feature}</strong></td><td>{row.gemini}</td><td>{row.chatgpt}</td><td>{row.google}</td></tr>)}</tbody>
+        </table>
+      </div>
+      <div class="matrix-card-list">
+        {comparisonRows.map((row) => (
+          <div class="matrix-mobile-card">
+            <span>{row.feature}</span>
+            <div class="mobile-compare-row"><strong>Gemini:</strong> {row.gemini}</div>
+            <div class="mobile-compare-row"><strong>ChatGPT:</strong> {row.chatgpt}</div>
+            <div class="mobile-compare-row"><strong>Google Asst:</strong> {row.google}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="utility-content-section">
+    <div class="container">
+      <div class="tool-section-heading">
+        <div>
+          <span>Direct answers</span>
+          <h2>Common compatibility questions</h2>
+        </div>
+      </div>
+      <div class="tracker-faq-grid">
+        <details class="tracker-faq">
+          <summary>Does my car support Gemini?</summary>
+          <p>Only if it has Google built-in and the automaker has rolled out the update in your region. Start with <a href="/google-built-in-car-models/">Google built-in car models</a>, then use <a href="/gm-gemini-update/">GM Gemini</a>, <a href="/volvo-gemini-supported-models/">Volvo Gemini</a>, or <a href="/polestar-gemini-update/">Polestar Gemini</a> for specific eligibility checks.</p>
+        </details>
+        <details class="tracker-faq">
+          <summary>Can I use ChatGPT in my car?</summary>
+          <p>If you have an iPhone with CarPlay, yes. You need a supported iPhone, updated iOS, the ChatGPT app, and CarPlay enabled. See <a href="/chatgpt-carplay-requirements/">ChatGPT CarPlay requirements</a>.</p>
+        </details>
+        <details class="tracker-faq">
+          <summary>Is Android Auto the same as Google built-in?</summary>
+          <p>No. Android Auto projects your phone to the car screen. Google built-in is vehicle-native software. A car can have Android Auto without Google built-in. See <a href="/google-built-in-vs-android-auto/">the platform guide</a>.</p>
+        </details>
+        <details class="tracker-faq">
+          <summary>Which AI assistant is best for my car?</summary>
+          <p>It depends on your platform. Google built-in vehicles → Gemini. iPhone + CarPlay → ChatGPT + Siri. Android Auto → Google Assistant. See <a href="/best-ai-assistants-for-cars/">the decision matrix</a>.</p>
+        </details>
+        <details class="tracker-faq">
+          <summary>Can I use Claude or Perplexity in my car?</summary>
+          <p>Not confirmed for any vehicle or CarPlay integration. See <a href="/future-ai-assistants-in-cars/">future assistant status</a>.</p>
+        </details>
+        <details class="tracker-faq">
+          <summary>Does this tool collect my vehicle data?</summary>
+          <p>No. This is a static guide. No data is collected, stored, or transmitted. It routes you to the right checklist based on your platform choice.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,52 @@
+---
+import { disclaimer, navItems } from '../data/site';
+---
+<footer class="site-footer">
+  <div class="container footer-join">
+    <div>
+      <h2>Join AI Car Assistant Guide</h2>
+      <p>Receive rollout updates, setup checklists, and safer in-car assistant tips.</p>
+    </div>
+    <a class="footer-cta" href="/update-tracker/">Follow updates</a>
+    <a class="back-top" href="#">Back to Top⌃</a>
+  </div>
+  <div class="container footer-grid">
+    <section>
+      <h2 class="footer-brand">
+        <img src="/assets/logo-option-c.svg" alt="" width="34" height="34" />
+        <span>AI Car Assistant Guide</span>
+      </h2>
+      <p>{disclaimer}</p>
+    </section>
+    <section>
+      <h3>Guides</h3>
+      <div class="footer-links">
+        {navItems.slice(0, 4).map((item) => <a href={item.href}>{item.label}</a>)}
+      </div>
+    </section>
+    <section>
+      <h3>Tools</h3>
+      <div class="footer-links">
+        <a href="/compatibility-checker/">Compatibility guide</a>
+        <a href="/update-tracker/">Update tracker</a>
+        <a href="/gemini-car-commands/">Gemini commands</a>
+        <a href="/chatgpt-carplay-prompts-for-driving/">CarPlay prompts</a>
+      </div>
+    </section>
+    <section>
+      <h3>Trust</h3>
+      <div class="footer-links">
+        <a href="/about/">About</a>
+        <a href="/methodology/">Methodology</a>
+        <a href="/editorial-policy/">Editorial policy</a>
+        <a href="/contact/">Contact</a>
+        <a href="/privacy-policy/">Privacy</a>
+        <a href="/terms/">Terms</a>
+      </div>
+    </section>
+  </div>
+  <div class="container footer-bottom">
+    <span>© {new Date().getFullYear()} AI Car Assistant Guide. Independent driver-first information.</span>
+    <span>Static SEO-friendly guides. No accounts, no forum, no manual ad slots.</span>
+  </div>
+</footer>

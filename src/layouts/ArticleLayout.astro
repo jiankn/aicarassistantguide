@@ -1,0 +1,339 @@
+---
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import StatusBadge from '../components/StatusBadge.astro';
+import BaseLayout from './BaseLayout.astro';
+import { getRelatedPages, type GuidePage } from '../data/pages';
+import { safetyNote, site, authorBio, contactEmail } from '../data/site';
+
+interface Props {
+  page: GuidePage;
+}
+
+const { page } = Astro.props;
+const related = getRelatedPages(page);
+const infoGain = page.infoGain ?? [];
+const verificationLog = page.verificationLog ?? [];
+const evidenceRefs = page.evidenceRefs ?? [];
+const articleQuickLinks = [
+  { label: 'Check compatibility', href: '/compatibility-checker/' },
+  { label: 'Track updates', href: '/update-tracker/' },
+  { label: 'How we verify', href: '/methodology/' }
+];
+const articleStats = [
+  { label: 'Status', value: page.status.replaceAll('-', ' ') },
+  { label: 'Requirements', value: `${page.requirements.length} checks` },
+  { label: 'Checklist', value: `${page.checklist.length} steps` }
+];
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || site.url;
+const canonicalPath = `/${page.slug}/`;
+const nonArticleSchemaTypes: Record<string, string> = {
+  about: 'AboutPage',
+  contact: 'ContactPage',
+  methodology: 'WebPage',
+  'editorial-policy': 'WebPage',
+  'privacy-policy': 'WebPage',
+  terms: 'WebPage'
+};
+const schemaType = nonArticleSchemaTypes[page.slug] || 'Article';
+const isArticleSchema = schemaType === 'Article';
+const pageSchema = {
+  '@context': 'https://schema.org',
+  '@type': schemaType,
+  ...(isArticleSchema ? { headline: page.title } : { name: page.title }),
+  description: page.description,
+  datePublished: page.lastUpdated,
+  dateModified: page.lastUpdated,
+  ...(isArticleSchema ? { author: { '@type': 'Organization', name: authorBio.name, description: authorBio.role, url: new URL(authorBio.links.methodology, siteUrl).toString() } } : {}),
+  publisher: { '@type': 'Organization', name: site.name },
+  mainEntityOfPage: new URL(canonicalPath, siteUrl).toString()
+};
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+    { '@type': 'ListItem', position: 2, name: page.cluster, item: new URL(`/${page.slug}/`, siteUrl).toString() },
+    { '@type': 'ListItem', position: 3, name: page.title, item: new URL(canonicalPath, siteUrl).toString() }
+  ]
+};
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: page.faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: { '@type': 'Answer', text: faq.answer }
+  }))
+};
+const hasInfoGain = infoGain.length > 0;
+const hasVerLog = verificationLog.length > 0;
+const hasEvidence = evidenceRefs.length > 0;
+const shouldIncludeFaqSchema = isArticleSchema && page.faqs.length > 0;
+const structuredData = shouldIncludeFaqSchema ? [pageSchema, breadcrumbSchema, faqSchema] : [pageSchema, breadcrumbSchema];
+const isContactPage = page.slug === 'contact';
+const correctionMailto = `mailto:${contactEmail}?subject=${encodeURIComponent('Correction for AI Car Assistant Guide')}&body=${encodeURIComponent('Page URL:\nIssue or suggested update:\nOfficial source URL:\nVehicle brand/model/model year/region if relevant:\n')}`;
+const toc = [
+  ['confirmed', 'Confirmed vs possible'],
+  ...(isContactPage ? [['send-correction', 'Send a correction']] : []),
+  ...(hasInfoGain ? [['info-gain', 'Only-on-this-page insights']] : []),
+  ['requirements', 'Requirements'],
+  ['checklist', 'Step-by-step checklist'],
+  ['mistakes', 'Common mistakes'],
+  ['next', 'What to do next'],
+  ['faq', 'FAQ'],
+  ['sources', 'Sources checked'],
+  ...((hasVerLog || hasEvidence) ? [['verification', 'Verification log']] : [])
+];
+---
+<BaseLayout title={page.metaTitle} description={page.description} pathname={canonicalPath} image={page.heroImage} structuredData={structuredData} ogType={isArticleSchema ? 'article' : 'website'}>
+  <section class="article-v2-hero">
+    <div class="container article-v2-hero-grid">
+      <div class="article-v2-copy">
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: page.cluster }, { label: page.title }]} />
+        <p class="article-v2-kicker">{page.pageType} · {page.primaryKeyword}</p>
+        <h1 class="article-title">{page.title}</h1>
+        <p class="article-description">{page.description}</p>
+        <div class="meta-row article-v2-meta">
+          <StatusBadge status={page.status} />
+          <span>Updated {page.lastUpdated}</span>
+          <span>Reviewed by {page.reviewedBy}</span>
+        </div>
+        <div class="article-v2-answer-card">
+          <strong>Short answer</strong>
+          <p>{page.shortAnswer}</p>
+        </div>
+        <div class="home-v2-picker">
+          <span>My car is</span>
+          <select id="article-car-picker" aria-label="Select your car brand or platform">
+            <option value="" disabled selected>Choose brand or platform</option>
+            <optgroup label="GM vehicles">
+              <option value="/gm-gemini-update/">Cadillac</option>
+              <option value="/gm-gemini-update/">Chevrolet</option>
+              <option value="/gm-gemini-update/">GMC</option>
+              <option value="/gm-gemini-update/">Buick</option>
+            </optgroup>
+            <optgroup label="Other brands">
+              <option value="/polestar-gemini-update/">Polestar</option>
+            </optgroup>
+            <optgroup label="Phone platform">
+              <option value="/chatgpt-carplay/">iPhone · CarPlay</option>
+              <option value="/does-gemini-work-with-android-auto/">Android · Auto</option>
+            </optgroup>
+            <option value="/compatibility-checker/">Not sure / Other</option>
+          </select>
+          <button id="article-car-picker-go" type="button">Check guide →</button>
+        </div>
+        <script is:inline>
+          document.getElementById('article-car-picker-go').addEventListener('click', function() {
+            var v = document.getElementById('article-car-picker').value;
+            if (v) window.location.href = v;
+          });
+          document.getElementById('article-car-picker').addEventListener('change', function() {
+            if (this.value) window.location.href = this.value;
+          });
+        </script>
+      </div>
+      <aside class="article-v2-visual-card">
+        <img src={page.heroImage} alt={`${page.title} visual guide`} loading="eager" width="1920" height="1080" />
+        <div>
+          <span>{page.cluster}</span>
+          <strong>{page.pageType}</strong>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="article-v2-nav-band">
+    <div class="container article-v2-nav-grid">
+      <nav class="article-v2-quick-links" aria-label="Article starting points">
+        {articleQuickLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+      </nav>
+      <div class="article-v2-stats" aria-label="Article summary">
+        {articleStats.map((stat) => (
+          <div>
+            <span>{stat.label}</span>
+            <strong>{stat.value}</strong>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <div class="container article-body article-v2-body">
+    <article class="article-content article-v2-content">
+      <section id="confirmed" class="article-section">
+        <h2>Confirmed vs possible</h2>
+        <div class="fact-grid">
+          <div class="fact-card">
+            <span>Confirmed</span>
+            {page.confirmedFacts.map((fact) => <p>{fact}</p>)}
+          </div>
+          <div class="fact-card">
+            <span>Possible or not fully public</span>
+            {page.uncertainAreas.map((area) => <p>{area}</p>)}
+          </div>
+        </div>
+      </section>
+      {isContactPage && (
+      <section id="send-correction" class="article-section">
+        <h2>Send a correction</h2>
+        <div class="direct-answer-band">
+          <strong>Email:</strong> <a href={correctionMailto}>{contactEmail}</a>
+        </div>
+        <div class="fact-grid">
+          <div class="fact-card">
+            <span>Include</span>
+            <p>Page URL, issue, official source URL, and vehicle brand, model, model year, and region if the update is vehicle-specific.</p>
+          </div>
+          <div class="fact-card">
+            <span>Use for</span>
+            <p>Accuracy corrections, source updates, rollout reports, and editorial questions. Official support requests should still go to the automaker, Apple, Google, or OpenAI.</p>
+          </div>
+        </div>
+      </section>
+      )}
+      {hasInfoGain && (
+      <section id="info-gain" class="article-section">
+        <h2>Only on this page</h2>
+        <div class="info-gain-grid">
+          {infoGain.map((item) => (
+            <div class="info-gain-card">
+              <span>{item.label}</span>
+              <p>{item.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+      )}
+      <section id="requirements" class="article-section">
+        <h2>Requirements table</h2>
+        <div class="table-wrap">
+          <table class="matrix">
+            <thead><tr><th>Check</th><th>What to verify</th><th>Why it matters</th></tr></thead>
+            <tbody>
+              {page.requirements.map((row) => <tr><td><strong>{row.item}</strong></td><td>{row.whatToCheck}</td><td>{row.whyItMatters}</td></tr>)}
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section id="checklist" class="article-section">
+        <h2>Step-by-step checklist</h2>
+        <ul class="check-list">
+          {page.checklist.map((item) => <li>{item}</li>)}
+        </ul>
+      </section>
+      <section id="mistakes" class="article-section">
+        <h2>Common mistakes</h2>
+        <div class="fact-grid">
+          {page.commonMistakes.map((item) => <div class="fact-card"><span>Avoid</span><p>{item}</p></div>)}
+        </div>
+      </section>
+      <section id="next" class="article-section">
+        <h2>What to do next</h2>
+        <ul class="check-list">
+          {page.nextSteps.map((item) => <li>{item}</li>)}
+        </ul>
+        <p class="safety-note">{safetyNote}</p>
+      </section>
+      <section id="faq" class="article-section">
+        <h2>FAQ</h2>
+        {page.faqs.map((faq) => <div class="faq-item"><h3>{faq.question}</h3><p>{faq.answer}</p></div>)}
+      </section>
+      <section id="sources" class="article-section">
+        <h2>Sources checked</h2>
+        <ul class="source-list">
+          {page.sources.map((source) => <li><strong><a href={source.url} rel="noopener noreferrer" target="_blank">{source.title}</a></strong><span>{source.sourceType}</span></li>)}
+        </ul>
+      </section>
+      {(hasVerLog || hasEvidence) && (
+      <section id="verification" class="article-section">
+        <h2>Verification log</h2>
+        <p class="verification-intro">This log shows how and when we verified the claims on this page. We do not claim hands-on testing — we verify through official sources and documentation.</p>
+        {hasVerLog && (
+        <div class="verification-timeline">
+          {verificationLog.map((entry) => (
+            <div class="verification-entry">
+              <time>{entry.date}</time>
+              <div>
+                <strong>{entry.action}</strong>
+                <p>{entry.result}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        )}
+        {hasEvidence && (
+        <div class="evidence-grid">
+          <h3>Evidence references</h3>
+          {evidenceRefs.map((ref) => (
+            <div class="evidence-card">
+              <span class={`evidence-type evidence-type--${ref.type}`}>{ref.type.replaceAll('-', ' ')}</span>
+              <strong>{ref.label}</strong>
+              <p>{ref.desc}</p>
+            </div>
+          ))}
+        </div>
+        )}
+      </section>
+      )}
+      <section id="author" class="article-section author-bio-section">
+        <h2>About the editorial team</h2>
+        <div class="author-bio-card">
+          <img src={authorBio.avatar} alt={authorBio.name} class="author-bio-avatar" width="64" height="64" loading="lazy" />
+          <div class="author-bio-body">
+            <strong class="author-bio-name">{authorBio.name}</strong>
+            <span class="author-bio-role">{authorBio.role}</span>
+            <p class="author-bio-text">{authorBio.bio}</p>
+            <p class="author-bio-method">{authorBio.methodology}</p>
+            <nav class="author-bio-links">
+              <a href={authorBio.links.methodology}>Methodology</a>
+              <a href={authorBio.links.editorial}>Editorial policy</a>
+              <a href={authorBio.links.contact}>Send a correction</a>
+            </nav>
+          </div>
+        </div>
+        <div class="methodology-pipeline">
+          <div class="methodology-step">
+            <span class="methodology-step-num">1</span>
+            <strong>Source</strong>
+            <p>Official docs, automaker pages, platform help centers</p>
+          </div>
+          <div class="methodology-step">
+            <span class="methodology-step-num">2</span>
+            <strong>Label</strong>
+            <p>Every claim tagged: confirmed, possible, not confirmed, or rollout in progress</p>
+          </div>
+          <div class="methodology-step">
+            <span class="methodology-step-num">3</span>
+            <strong>Track</strong>
+            <p>Source URLs monitored for changes; guides flagged for review</p>
+          </div>
+          <div class="methodology-step">
+            <span class="methodology-step-num">4</span>
+            <strong>Correct</strong>
+            <p>Driver reports and corrections processed via <a href="/contact/">contact page</a></p>
+          </div>
+        </div>
+      </section>
+    </article>
+    <aside class="article-card-rail article-v2-rail">
+      <div class="rail-card article-toc-card">
+        <h2>On this page</h2>
+        <ul class="toc-list">
+          {toc.map(([href, label]) => <li><a href={`#${href}`}>{label}</a></li>)}
+        </ul>
+      </div>
+      <div class="rail-card">
+        <h2>Related guides</h2>
+        <ul class="clean-list">
+          {related.map((item) => <li><a href={`/${item.slug}/`}>{item.title}</a></li>)}
+        </ul>
+      </div>
+      <div class="rail-card article-v2-cta-card">
+        <h2>Not sure which path applies?</h2>
+        <p class="mini-meta">Start with platform fit before changing settings.</p>
+        <a class="read-link" href="/compatibility-checker/">Open compatibility guide</a>
+      </div>
+    </aside>
+  </div>
+</BaseLayout>

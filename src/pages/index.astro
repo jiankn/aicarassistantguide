@@ -1,0 +1,317 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { pages } from '../data/pages';
+import { site } from '../data/site';
+
+const findPage = (slug: string) => pages.find((page) => page.slug === slug);
+
+const platformPaths = [
+  {
+    label: 'Model coverage',
+    title: 'Find your exact car',
+    href: '/google-built-in-car-models/',
+    image: '/assets/compatibility-map-real.jpg',
+    text: 'Start here for GM, Volvo, Polestar, Honda Passport, Lincoln Nautilus, and Renault 5 model checks.'
+  },
+  {
+    label: 'Gemini in Car',
+    title: 'Vehicle-native Gemini',
+    href: '/gemini-in-cars/',
+    image: '/assets/gemini-dashboard-real.jpg',
+    text: 'Start here if the assistant is expected to run from Google built-in or the vehicle screen.'
+  },
+  {
+    label: 'CarPlay',
+    title: 'iPhone and app path',
+    href: '/chatgpt-carplay/',
+    image: '/assets/carplay-screen-real.jpg',
+    text: 'Use this path when the assistant depends on iPhone, iOS, app visibility, Siri, or CarPlay permissions.'
+  },
+  {
+    label: 'Android Auto',
+    title: 'Phone projection path',
+    href: '/does-gemini-work-with-android-auto/',
+    image: '/assets/android-auto-phone-real.jpg',
+    text: 'Separate Android phone Gemini behavior from vehicle-native Google built-in support.'
+  },
+  {
+    label: 'Not sure',
+    title: 'Compatibility map',
+    href: '/compatibility-checker/',
+    image: '/assets/compatibility-map-real.jpg',
+    text: 'Map your car, phone, and assistant setup before you reset anything.'
+  }
+];
+
+const scenarioStories = [
+  {
+    title: 'Winter commute',
+    href: '/gemini-car-commands/',
+    image: '/assets/winter-commute-real.jpg',
+    text: 'Voice-first route changes, cabin prep, messages, and ETA checks before the road gets busy.'
+  },
+  {
+    title: 'EV charging stop',
+    href: '/gm-gemini-update/',
+    image: '/assets/ev-charging-real.jpg',
+    text: 'Find chargers, precondition the battery, compare stops, and keep the vehicle parked during setup.'
+  },
+  {
+    title: 'Family road trip',
+    href: '/ai-assistant-for-road-trips/',
+    image: '/assets/family-road-trip-real.jpg',
+    text: 'Plan routes, lunch stops, packing checks, and kid-friendly breaks without making the driver read.'
+  },
+  {
+    title: 'Parked voice setup',
+    href: '/how-to-enable-gemini-in-your-car/',
+    image: '/assets/parked-voice-setup-real.jpg',
+    text: 'Handle permissions, language, account, and first voice tests before the car moves.'
+  },
+  {
+    title: 'OTA update check',
+    href: '/update-tracker/',
+    image: '/assets/ota-update-real.jpg',
+    text: 'Track rollout timing, software updates, release notes, and feature labels in one place.'
+  }
+];
+
+const primaryGuides = [
+  findPage('google-built-in-car-models'),
+  findPage('gm-gemini-update'),
+  findPage('volvo-gemini-supported-models'),
+  findPage('chatgpt-carplay'),
+  findPage('google-built-in-vs-android-auto')
+].filter(Boolean);
+
+const toolCards = [
+  {
+    title: 'Compatibility Guide',
+    href: '/compatibility-checker/',
+    text: 'Identify whether you should troubleshoot the car, the phone, the app, or rollout timing.'
+  },
+  {
+    title: 'Update Tracker',
+    href: '/update-tracker/',
+    text: 'Follow dated changes for Gemini, ChatGPT in CarPlay, Google built-in, Android Auto, and future assistants.'
+  },
+  {
+    title: 'Safety Guide',
+    href: '/ai-voice-assistant-safety-while-driving/',
+    text: 'Keep setup, reading, typing, and screen interaction parked. Use driving assistants voice-first.'
+  }
+];
+
+const searchColumns = [
+  {
+    title: 'Gemini in cars',
+    links: [
+      ['Google built-in car models', '/google-built-in-car-models/'],
+      ['Gemini in cars', '/gemini-in-cars/'],
+      ['GM Gemini update', '/gm-gemini-update/'],
+      ['Volvo Gemini models', '/volvo-gemini-supported-models/'],
+      ['Why Gemini is not showing', '/why-is-gemini-not-showing-in-my-gm-car/'],
+      ['Gemini Live in car', '/gemini-live-in-car/']
+    ]
+  },
+  {
+    title: 'Model guides',
+    links: [
+      ['Honda Passport Gemini', '/honda-passport-gemini-google-built-in/'],
+      ['Lincoln Nautilus Gemini', '/lincoln-nautilus-gemini-google-built-in/'],
+      ['Renault 5 Gemini', '/renault-5-gemini-google-built-in/'],
+      ['Polestar Gemini update', '/polestar-gemini-update/']
+    ]
+  },
+  {
+    title: 'CarPlay and projection',
+    links: [
+      ['ChatGPT in CarPlay', '/chatgpt-carplay/'],
+      ['ChatGPT CarPlay requirements', '/chatgpt-carplay-requirements/'],
+      ['ChatGPT vs Gemini in cars', '/chatgpt-carplay-vs-gemini-in-cars/'],
+      ['Does Gemini work with Android Auto?', '/does-gemini-work-with-android-auto/'],
+      ['Google built-in vs Android Auto', '/google-built-in-vs-android-auto/']
+    ]
+  },
+  {
+    title: 'Decisions and safety',
+    links: [
+      ['AI assistant compatibility', '/compatibility-checker/'],
+      ['Best AI assistants for cars', '/best-ai-assistants-for-cars/'],
+      ['Road trip assistant guide', '/ai-assistant-for-road-trips/'],
+      ['Voice assistant safety', '/ai-voice-assistant-safety-while-driving/']
+    ]
+  }
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: site.name,
+  url: site.url,
+  description: site.description
+};
+---
+<BaseLayout title="AI Car Assistant Guide: Gemini in Cars, ChatGPT CarPlay, Android Auto AI" description={site.description} pathname="/" structuredData={schema}>
+  <section class="home-v2-hero">
+    <div class="container home-v2-hero-grid">
+      <div class="home-v2-copy">
+        <p class="home-v2-kicker">Independent driver-first assistant guide</p>
+        <h1><span>Find the right AI</span><span>path for your car</span></h1>
+        <p class="home-v2-lede">Gemini in Car, ChatGPT in CarPlay, Android Auto, Google built-in, rollout timing, and safe voice use are different problems. This guide turns them into clear checks.</p>
+        <div class="home-v2-picker">
+          <span>My car is</span>
+          <select id="car-picker" aria-label="Select your car brand or platform">
+            <option value="" disabled selected>Choose brand or platform</option>
+            <optgroup label="GM vehicles">
+              <option value="/gm-gemini-update/">Cadillac</option>
+              <option value="/gm-gemini-update/">Chevrolet</option>
+              <option value="/gm-gemini-update/">GMC</option>
+              <option value="/gm-gemini-update/">Buick</option>
+            </optgroup>
+            <optgroup label="Other brands">
+              <option value="/volvo-gemini-supported-models/">Volvo</option>
+              <option value="/polestar-gemini-update/">Polestar</option>
+              <option value="/honda-passport-gemini-google-built-in/">Honda Passport</option>
+              <option value="/lincoln-nautilus-gemini-google-built-in/">Lincoln Nautilus</option>
+              <option value="/renault-5-gemini-google-built-in/">Renault 5 E-Tech</option>
+            </optgroup>
+            <optgroup label="Phone platform">
+              <option value="/chatgpt-carplay/">iPhone · CarPlay</option>
+              <option value="/does-gemini-work-with-android-auto/">Android · Auto</option>
+            </optgroup>
+            <option value="/compatibility-checker/">Not sure / Other</option>
+          </select>
+          <button id="car-picker-go" type="button">Check guide →</button>
+        </div>
+        <script is:inline>
+          document.getElementById('car-picker-go').addEventListener('click', function() {
+            var v = document.getElementById('car-picker').value;
+            if (v) window.location.href = v;
+          });
+          document.getElementById('car-picker').addEventListener('change', function() {
+            if (this.value) window.location.href = this.value;
+          });
+        </script>
+        <div class="home-v2-actions" aria-label="Primary actions">
+          <a href="/compatibility-checker/">Check compatibility</a>
+          <a href="/update-tracker/">Track updates</a>
+          <a href="/methodology/">How we verify</a>
+        </div>
+      </div>
+      <aside class="home-v2-visual">
+        <img src="/assets/hero-cockpit-collage-real.jpg" alt="Multi-brand daylight cockpit collage showing Gemini in Car as the primary vehicle assistant path" width="1920" height="1080" />
+        <div class="home-v2-visual-panel">
+          <span>Start with platform fit</span>
+          <strong>Built-in, projection, or future feature?</strong>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="home-v2-section home-v2-platforms">
+    <div class="container">
+      <div class="home-v2-section-head">
+        <span>Choose the right layer</span>
+        <h2>Most issues are platform mismatches, not broken assistants.</h2>
+      </div>
+      <div class="home-v2-platform-grid">
+        {platformPaths.map((path) => (
+          <a class="home-v2-platform-card" href={path.href}>
+            <img src={path.image} alt="" loading="lazy" width="1920" height="1080" />
+            <div>
+              <span>{path.label}</span>
+              <h3>{path.title}</h3>
+              <p>{path.text}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="home-v2-section home-v2-scenarios">
+    <div class="container">
+      <div class="home-v2-section-head wide">
+        <span>Real driving scenarios</span>
+        <h2>Use images and guides that match how people actually meet AI in the car.</h2>
+        <p>Each scene points to a different user intent: commute, charging, family planning, parked setup, or software rollout.</p>
+      </div>
+      <div class="home-v2-scenario-grid">
+        {scenarioStories.map((story, index) => (
+          <a class:list={['home-v2-scenario-card', index === 0 && 'is-large']} href={story.href}>
+            <img src={story.image} alt="" loading="lazy" width="1920" height="1080" />
+            <div>
+              <span>Scene {index + 1}</span>
+              <h3>{story.title}</h3>
+              <p>{story.text}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="home-v2-section">
+    <div class="container home-v2-guide-layout">
+      <div class="home-v2-guide-copy">
+        <span>Core guides</span>
+        <h2>Read the short answer first. Then follow the checks.</h2>
+        <p>The article system is built around confirmed facts, uncertain areas, requirements, checklists, mistakes, next steps, and source confidence.</p>
+      </div>
+      <div class="home-v2-guide-grid">
+        {primaryGuides.map((page) => page && (
+          <a class="home-v2-guide-card" href={`/${page.slug}/`}>
+            <img src={page.heroImage} alt="" loading="lazy" width="1920" height="1080" />
+            <div>
+              <span>{page.pageType}</span>
+              <h3>{page.title}</h3>
+              <p>{page.description}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="home-v2-section home-v2-tools">
+    <div class="container">
+      <div class="home-v2-tool-grid">
+        {toolCards.map((tool) => (
+          <a class="home-v2-tool-card" href={tool.href}>
+            <span>{tool.title}</span>
+            <p>{tool.text}</p>
+            <strong>Open guide</strong>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="home-v2-section home-v2-trust">
+    <div class="container home-v2-trust-grid">
+      <div>
+        <span>Editorial stance</span>
+        <h2>Realistic images, direct brand context, no fake official endorsement.</h2>
+      </div>
+      <p>Visible vehicle context helps users recognize the setup, but the guidance stays independent: official sources are separated from possible rollout behavior, and every driving workflow keeps parked setup and voice-first use visible.</p>
+    </div>
+  </section>
+
+  <section class="home-v2-section home-v2-searches">
+    <div class="container">
+      <div class="home-v2-section-head">
+        <span>Common searches</span>
+        <h2>Jump directly to the problem you are trying to solve.</h2>
+      </div>
+      <div class="home-v2-search-columns">
+        {searchColumns.map((column) => (
+          <div>
+            <h3>{column.title}</h3>
+            {column.links.map(([label, href]) => <a href={href}>{label}</a>)}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

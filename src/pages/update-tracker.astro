@@ -1,0 +1,230 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import StatusBadge from '../components/StatusBadge.astro';
+import { updates, siteChangelog } from '../data/updates';
+import { getPage } from '../data/pages';
+import { site } from '../data/site';
+
+const page = getPage('update-tracker');
+const trackerRules = [
+  {
+    label: 'Confirmed',
+    text: 'Use this when an official automaker, Apple, OpenAI, Google, or product documentation source names the feature path and requirement.'
+  },
+  {
+    label: 'Rollout in progress',
+    text: 'Use this when the feature is official but may not be active for every eligible vehicle, account, region, or software build.'
+  },
+  {
+    label: 'Possible',
+    text: 'Use this when the pattern is plausible but source evidence is incomplete. The linked guide should explain what is not confirmed.'
+  },
+  {
+    label: 'Not confirmed',
+    text: 'Use this for Claude, Perplexity, or other future car assistant searches where no official vehicle or CarPlay path is confirmed.'
+  }
+];
+const updateChecklist = [
+  'Check whether the update changes availability, requirements, troubleshooting, or only wording.',
+  'Prefer official automaker, platform, app, or product documentation sources.',
+  'Update the related guide when a tracker row changes a requirement.',
+  'Do not create thin one-off news pages for small changes.',
+  'Keep safety language visible when the update affects in-car use.'
+];
+const featuredUpdate = updates[0];
+const secondaryUpdates = updates.slice(1, 3);
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || site.url;
+const trackerSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'AI Car Assistant Update Tracker',
+  description: page?.description || 'Track AI car assistant updates.',
+  url: new URL('/update-tracker/', siteUrl).toString(),
+  dateModified: page?.lastUpdated || featuredUpdate.date
+};
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  itemListElement: updates.map((update, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    url: new URL(update.relatedHref, siteUrl).toString(),
+    name: update.title,
+    description: update.summary
+  }))
+};
+---
+<BaseLayout title="AI Car Assistant Update Tracker" description={page?.description || 'Track AI car assistant updates.'} pathname="/update-tracker/" image="/assets/ota-update-real.jpg" structuredData={[trackerSchema, itemListSchema]}>
+  <section class="tracker-portal-hero">
+    <div class="container tracker-hero-grid">
+      <div>
+        <p class="eyebrow">Latest AI car assistant updates</p>
+        <h1 class="article-title">AI Car Assistant Update Tracker</h1>
+        <p class="article-description">A dated tracker for Gemini in cars, ChatGPT in CarPlay, Google built-in, Android Auto, and future-status pages. Product and rollout updates stay separate from internal site changelog items.</p>
+        <div class="direct-answer-band">
+          <strong>Quick answer:</strong> The latest update ({featuredUpdate.date}) covers <em>{featuredUpdate.title.toLowerCase()}</em>. {featuredUpdate.action}
+        </div>
+        <div class="meta-row"><StatusBadge status="confirmed" /><span>Last updated {featuredUpdate.date}</span></div>
+        <nav class="quick-pill-row utility-pill-row" aria-label="Update tracker shortcuts">
+          <a href="/google-built-in-car-models/">Model coverage</a>
+          <a href="/volvo-gemini-supported-models/">Volvo Gemini</a>
+          <a href="/gm-gemini-update/">GM Gemini</a>
+          <a href="/chatgpt-carplay/">CarPlay AI</a>
+          <a href="/google-built-in-vs-android-auto/">Platform changes</a>
+          <a href="/compatibility-checker/">Check compatibility</a>
+        </nav>
+      </div>
+      <aside class="tracker-hero-card">
+        <img src="/assets/ota-update-real.jpg" alt="Bright parked OTA update scene showing Gemini in Car release notes and assistant improvements" />
+        <div>
+          <span>Update source rule</span>
+          <strong>Guide-first updates, not thin news pages.</strong>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="tracker-news-section">
+    <div class="container">
+      <h2 class="compact-heading">Latest car assistant product and rollout updates</h2>
+      <div class="tracker-news-grid">
+        {featuredUpdate && (
+          <a class="tracker-news-card tracker-news-card-large" href={featuredUpdate.relatedHref}>
+            <img src={featuredUpdate.image} alt="" loading="lazy" />
+            <div>
+              <span>{featuredUpdate.status}</span>
+              <time datetime={featuredUpdate.date}>{featuredUpdate.date}</time>
+              <h3>{featuredUpdate.title}</h3>
+              <p>{featuredUpdate.summary}</p>
+            </div>
+          </a>
+        )}
+        {secondaryUpdates.map((update) => (
+          <a class="tracker-news-card" href={update.relatedHref}>
+            <img src={update.image} alt="" loading="lazy" />
+            <div>
+              <span>{update.status}</span>
+              <time datetime={update.date}>{update.date}</time>
+              <h3>{update.title}</h3>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="utility-content-section soft">
+    <div class="container">
+      <div class="tool-section-heading">
+        <div>
+          <span>Full tracker</span>
+          <h2>Scan every update in one static table</h2>
+        </div>
+        <a href="/rss.xml">RSS feed</a>
+      </div>
+      <div class="table-wrap tracker-table">
+        <table class="matrix">
+          <thead><tr><th>Date</th><th>Assistant · Platform</th><th>Region</th><th>Status</th><th>What changed</th><th>Impact &amp; action</th><th>Confidence</th><th>Guide</th></tr></thead>
+          <tbody>{updates.map((update) => <tr><td><time datetime={update.date}>{update.date}</time></td><td>{update.assistant}<br /><span class="table-sub">{update.platform}</span></td><td>{update.region}</td><td>{update.status}</td><td><strong>{update.title}</strong><br />{update.summary}</td><td><p class="table-impact">{update.impact}</p><p class="table-action">{update.action}</p></td><td><span class={`confidence-badge confidence-${update.confidence}`}>{update.confidence}</span></td><td><a href={update.relatedHref}>Open guide</a></td></tr>)}</tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="utility-content-section">
+    <div class="container tracker-timeline-layout">
+      <div>
+        <span class="mini-brand">Update checklist</span>
+        <h2>How each tracker item gets handled.</h2>
+        <ul class="check-list portal-check-list">
+          {updateChecklist.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+      <div class="update-timeline-list">
+        {updates.map((update) => (
+          <a class="update-timeline-item" href={update.relatedHref}>
+            <time datetime={update.date}>{update.date}</time>
+            <strong>{update.title}</strong>
+            <span>{update.assistant} · {update.platform}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="utility-content-section soft">
+    <div class="container">
+      <div class="tool-section-heading">
+        <div>
+          <span>Status labels</span>
+          <h2>What each label means</h2>
+        </div>
+      </div>
+      <div class="fact-grid portal-fact-grid">
+        {trackerRules.map((rule) => <div class="fact-card"><span>{rule.label}</span><p>{rule.text}</p></div>)}
+      </div>
+      <div class="tracker-use-band">
+        <div><span>For drivers</span><p>Use the tracker to decide whether your issue is likely caused by rollout timing, platform requirements, or app and phone setup.</p></div>
+        <div><span>For site changes</span><p>Internal editorial changes are tracked separately below so the main tracker stays focused on user-facing assistant availability and requirements.</p></div>
+      </div>
+      <p class="safety-note">Update tracker entries are informational. Feature availability can still vary by vehicle, phone, region, language, account, and software version.</p>
+    </div>
+  </section>
+
+  <section class="utility-content-section soft">
+    <div class="container">
+      <div class="tool-section-heading">
+        <div>
+          <span>Site changelog</span>
+          <h2>Editorial and crawl-surface changes</h2>
+        </div>
+      </div>
+      <div class="update-timeline-list">
+        {siteChangelog.map((update) => (
+          <a class="update-timeline-item" href={update.relatedHref}>
+            <time datetime={update.date}>{update.date}</time>
+            <strong>{update.title}</strong>
+            <span>{update.status} · {update.platform}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="utility-content-section">
+    <div class="container">
+      <div class="tool-section-heading">
+        <div>
+          <span>Direct answers</span>
+          <h2>Common update tracker questions</h2>
+        </div>
+      </div>
+      <div class="tracker-faq-grid">
+        <details class="tracker-faq">
+          <summary>Is Gemini available in my GM car yet?</summary>
+          <p>It depends on model year, Google built-in presence, US region, software version, and rollout phase. Check the <a href="/gm-gemini-update/">GM Gemini guide</a> for a step-by-step eligibility check.</p>
+        </details>
+        <details class="tracker-faq">
+          <summary>Is ChatGPT working in CarPlay right now?</summary>
+          <p>Yes, for supported iPhones with the ChatGPT app, correct iOS version, and CarPlay enabled. See the <a href="/chatgpt-carplay-requirements/">requirements guide</a> for the full checklist.</p>
+        </details>
+        <details class="tracker-faq">
+          <summary>Can I use Claude or Perplexity in my car?</summary>
+          <p>Not confirmed. Neither has announced CarPlay or vehicle-native integration. See the <a href="/future-ai-assistants-in-cars/">future assistants status page</a> for the latest.</p>
+        </details>
+        <details class="tracker-faq">
+          <summary>Is Google built-in the same as Android Auto?</summary>
+          <p>No. Google built-in is vehicle-native software. Android Auto is phone projection. A car can have Android Auto but not Google built-in. See the <a href="/google-built-in-vs-android-auto/">platform distinction guide</a>.</p>
+        </details>
+        <details class="tracker-faq">
+          <summary>How often is this tracker updated?</summary>
+          <p>When official sources change or significant rollout events occur. Each entry shows its date and confidence level. We update guide pages first, then add tracker entries.</p>
+        </details>
+        <details class="tracker-faq">
+          <summary>What does the confidence level mean?</summary>
+          <p><strong>High:</strong> based on official sources. <strong>Medium:</strong> based on reputable reporting plus partial official info. <strong>Low:</strong> based on community signals only. See <a href="/methodology/">methodology</a>.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
