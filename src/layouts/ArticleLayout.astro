@@ -1,6 +1,8 @@
 ---
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import StatusBadge from '../components/StatusBadge.astro';
+import VehicleCoverageTable from '../components/VehicleCoverageTable.astro';
+import VehicleGuideFinder from '../components/VehicleGuideFinder.astro';
 import BaseLayout from './BaseLayout.astro';
 import { getRelatedPages, type GuidePage } from '../data/pages';
 import { safetyNote, site, authorBio, contactEmail } from '../data/site';
@@ -20,10 +22,11 @@ const articleQuickLinks = [
   { label: 'How we verify', href: '/methodology/' }
 ];
 const articleStats = [
-  { label: 'Status', value: page.status.replaceAll('-', ' ') },
-  { label: 'Requirements', value: `${page.requirements.length} checks` },
-  { label: 'Checklist', value: `${page.checklist.length} steps` }
+  { label: 'Status', value: page.status.replaceAll('-', ' '), tone: 'status' },
+  { label: 'Requirements', value: `${page.requirements.length} checks`, tone: 'requirements' },
+  { label: 'Checklist', value: `${page.checklist.length} steps`, tone: 'checklist' }
 ];
+const showModelCoverageMap = page.slug === 'google-built-in-car-models';
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || site.url;
 const canonicalPath = `/${page.slug}/`;
 const nonArticleSchemaTypes: Record<string, string> = {
@@ -76,6 +79,7 @@ const toc = [
   ['confirmed', 'Confirmed vs possible'],
   ...(isContactPage ? [['send-correction', 'Send a correction']] : []),
   ...(hasInfoGain ? [['info-gain', 'Only-on-this-page insights']] : []),
+  ...(showModelCoverageMap ? [['us-popular-models', 'US model coverage map']] : []),
   ['requirements', 'Requirements'],
   ['checklist', 'Step-by-step checklist'],
   ['mistakes', 'Common mistakes'],
@@ -102,36 +106,7 @@ const toc = [
           <strong>Short answer</strong>
           <p>{page.shortAnswer}</p>
         </div>
-        <div class="home-v2-picker">
-          <span>My car is</span>
-          <select id="article-car-picker" aria-label="Select your car brand or platform">
-            <option value="" disabled selected>Choose brand or platform</option>
-            <optgroup label="GM vehicles">
-              <option value="/gm-gemini-update/">Cadillac</option>
-              <option value="/gm-gemini-update/">Chevrolet</option>
-              <option value="/gm-gemini-update/">GMC</option>
-              <option value="/gm-gemini-update/">Buick</option>
-            </optgroup>
-            <optgroup label="Other brands">
-              <option value="/polestar-gemini-update/">Polestar</option>
-            </optgroup>
-            <optgroup label="Phone platform">
-              <option value="/chatgpt-carplay/">iPhone · CarPlay</option>
-              <option value="/does-gemini-work-with-android-auto/">Android · Auto</option>
-            </optgroup>
-            <option value="/compatibility-checker/">Not sure / Other</option>
-          </select>
-          <button id="article-car-picker-go" type="button">Check guide →</button>
-        </div>
-        <script is:inline>
-          document.getElementById('article-car-picker-go').addEventListener('click', function() {
-            var v = document.getElementById('article-car-picker').value;
-            if (v) window.location.href = v;
-          });
-          document.getElementById('article-car-picker').addEventListener('change', function() {
-            if (this.value) window.location.href = this.value;
-          });
-        </script>
+        <VehicleGuideFinder id={`article-${page.slug}`} variant="compact" heading="Check another vehicle" lead="Use the same vehicle finder across guides. Exact evidence pages open directly; unsupported popular models route to the coverage map." />
       </div>
       <aside class="article-v2-visual-card">
         <img src={page.heroImage} alt={`${page.title} visual guide`} loading="eager" width="1920" height="1080" />
@@ -150,7 +125,7 @@ const toc = [
       </nav>
       <div class="article-v2-stats" aria-label="Article summary">
         {articleStats.map((stat) => (
-          <div>
+          <div class={`article-stat-card article-stat-card--${stat.tone}`}>
             <span>{stat.label}</span>
             <strong>{stat.value}</strong>
           </div>
@@ -205,6 +180,7 @@ const toc = [
         </div>
       </section>
       )}
+      {showModelCoverageMap && <VehicleCoverageTable />}
       <section id="requirements" class="article-section">
         <h2>Requirements table</h2>
         <div class="table-wrap">

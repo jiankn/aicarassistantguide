@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import VehicleGuideFinder from '../components/VehicleGuideFinder.astro';
 import { pages } from '../data/pages';
 import { site } from '../data/site';
 
@@ -159,40 +160,7 @@ const schema = {
         <p class="home-v2-kicker">Independent driver-first assistant guide</p>
         <h1><span>Find the right AI</span><span>path for your car</span></h1>
         <p class="home-v2-lede">Gemini in Car, ChatGPT in CarPlay, Android Auto, Google built-in, rollout timing, and safe voice use are different problems. This guide turns them into clear checks.</p>
-        <div class="home-v2-picker">
-          <span>My car is</span>
-          <select id="car-picker" aria-label="Select your car brand or platform">
-            <option value="" disabled selected>Choose brand or platform</option>
-            <optgroup label="GM vehicles">
-              <option value="/gm-gemini-update/">Cadillac</option>
-              <option value="/gm-gemini-update/">Chevrolet</option>
-              <option value="/gm-gemini-update/">GMC</option>
-              <option value="/gm-gemini-update/">Buick</option>
-            </optgroup>
-            <optgroup label="Other brands">
-              <option value="/volvo-gemini-supported-models/">Volvo</option>
-              <option value="/polestar-gemini-update/">Polestar</option>
-              <option value="/honda-passport-gemini-google-built-in/">Honda Passport</option>
-              <option value="/lincoln-nautilus-gemini-google-built-in/">Lincoln Nautilus</option>
-              <option value="/renault-5-gemini-google-built-in/">Renault 5 E-Tech</option>
-            </optgroup>
-            <optgroup label="Phone platform">
-              <option value="/chatgpt-carplay/">iPhone · CarPlay</option>
-              <option value="/does-gemini-work-with-android-auto/">Android · Auto</option>
-            </optgroup>
-            <option value="/compatibility-checker/">Not sure / Other</option>
-          </select>
-          <button id="car-picker-go" type="button">Check guide →</button>
-        </div>
-        <script is:inline>
-          document.getElementById('car-picker-go').addEventListener('click', function() {
-            var v = document.getElementById('car-picker').value;
-            if (v) window.location.href = v;
-          });
-          document.getElementById('car-picker').addEventListener('change', function() {
-            if (this.value) window.location.href = this.value;
-          });
-        </script>
+        <VehicleGuideFinder id="home" variant="hero" heading="Choose brand, model, or platform" lead="Dedicated guide where evidence exists. Popular US models without confirmed Gemini evidence route to the coverage hub instead of fake result pages." />
         <div class="home-v2-actions" aria-label="Primary actions">
           <a href="/compatibility-checker/">Check compatibility</a>
           <a href="/update-tracker/">Track updates</a>

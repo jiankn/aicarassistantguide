@@ -4,18 +4,18 @@ import { disclaimer, navItems } from '../data/site';
 <footer class="site-footer">
   <div class="container footer-join">
     <div>
-      <h2>Join AI Car Assistant Guide</h2>
-      <p>Receive rollout updates, setup checklists, and safer in-car assistant tips.</p>
+      <p class="footer-join-title">Stay informed</p>
+      <p>Rollout updates, setup checklists, and safer in-car assistant tips — no account needed.</p>
     </div>
     <a class="footer-cta" href="/update-tracker/">Follow updates</a>
-    <a class="back-top" href="#">Back to Top⌃</a>
+    <a class="back-top" href="#">Back to top ↑</a>
   </div>
   <div class="container footer-grid">
     <section>
-      <h2 class="footer-brand">
-        <img src="/assets/logo-option-c.svg" alt="" width="34" height="34" />
+      <p class="footer-brand">
+        <img src="/assets/logo-option-c.svg" alt="AI Car Assistant Guide logo" width="34" height="34" />
         <span>AI Car Assistant Guide</span>
-      </h2>
+      </p>
       <p>{disclaimer}</p>
     </section>
     <section>
@@ -27,10 +27,10 @@ import { disclaimer, navItems } from '../data/site';
     <section>
       <h3>Tools</h3>
       <div class="footer-links">
-        <a href="/compatibility-checker/">Compatibility guide</a>
-        <a href="/update-tracker/">Update tracker</a>
         <a href="/gemini-car-commands/">Gemini commands</a>
         <a href="/chatgpt-carplay-prompts-for-driving/">CarPlay prompts</a>
+        <a href="/update-tracker/">Update tracker</a>
+        <a href="/google-built-in-vs-android-auto/">Platform comparison</a>
       </div>
     </section>
     <section>
@@ -46,7 +46,7 @@ import { disclaimer, navItems } from '../data/site';
     </section>
   </div>
   <div class="container footer-bottom">
-    <span>© {new Date().getFullYear()} AI Car Assistant Guide. Independent driver-first information.</span>
-    <span>Static SEO-friendly guides. No accounts, no forum, no manual ad slots.</span>
+    <small>© {new Date().getFullYear()} AI Car Assistant Guide. Independent driver-first information.</small>
+    <small>Free guides for real drivers. No accounts, no forum.</small>
   </div>
 </footer>

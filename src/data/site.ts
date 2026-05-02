@@ -72,7 +72,7 @@ export const authorBio = {
 };
 
 export const disclaimer =
-  'AI Car Assistant Guide is an independent informational website. We are not affiliated with Google, OpenAI, Apple, GM, Polestar, Anthropic, or any automaker. Feature availability can vary by vehicle, region, language, software version, and rollout timing. Always follow local laws and avoid interacting with screens while driving.';
+  'AI Car Assistant Guide is an independent informational website, not affiliated with any automaker or technology company mentioned on this site. Feature availability varies by vehicle, region, software version, and rollout timing. Always follow local laws and avoid interacting with screens while driving.';
 
 export const safetyNote =
   'Safety note: Use voice-first features responsibly. Do not read, type, or interact with your vehicle screen while driving. Pull over safely if a task requires visual attention.';

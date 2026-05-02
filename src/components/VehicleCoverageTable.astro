@@ -1,0 +1,48 @@
+---
+import { modelCoverageRows } from '../data/vehicleCoverage';
+
+const tierLabel: Record<string, string> = {
+  'dedicated-guide': 'Dedicated guide',
+  'brand-guide': 'Brand guide',
+  'coverage-hub': 'Coverage hub'
+};
+---
+<section id="us-popular-models" class="article-section vehicle-coverage-section">
+  <h2>US model coverage map</h2>
+  <p class="vehicle-coverage-intro">This table separates dedicated evidence from popular US models that should be checked by platform first. It is intentionally a coverage map, not a claim that every listed model has Gemini active today.</p>
+  <div class="table-wrap vehicle-coverage-table">
+    <table class="matrix">
+      <caption>US vehicle model coverage for AI car assistant checks</caption>
+      <thead>
+        <tr>
+          <th>Brand</th>
+          <th>Models users search for</th>
+          <th>Current coverage</th>
+          <th>Evidence level</th>
+          <th>Next step</th>
+        </tr>
+      </thead>
+      <tbody>
+        {modelCoverageRows.map((item) => (
+          <tr>
+            <td><strong>{item.brand}</strong></td>
+            <td>{item.model}</td>
+            <td><a href={item.href}>{tierLabel[item.tier]}</a></td>
+            <td>{item.evidence}</td>
+            <td>{item.nextStep}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <div class="matrix-card-list vehicle-coverage-card-list">
+    {modelCoverageRows.map((item) => (
+      <a class="matrix-mobile-card" href={item.href}>
+        <span>{item.brand}</span>
+        <strong>{item.model}</strong>
+        <p>{item.evidence}</p>
+        <small>{item.nextStep}</small>
+      </a>
+    ))}
+  </div>
+</section>

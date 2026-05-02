@@ -1,18 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import VehicleGuideFinder from '../components/VehicleGuideFinder.astro';
 import { supportMatrix, comparisonRows } from '../data/supportMatrix';
 import { getPage } from '../data/pages';
 import { site } from '../data/site';
 
 const page = getPage('compatibility-checker');
-const toolPills = [
-  { label: 'Model coverage', href: '/google-built-in-car-models/' },
-  { label: 'GM with Google built-in', href: '/gm-gemini-update/' },
-  { label: 'Volvo models', href: '/volvo-gemini-supported-models/' },
-  { label: 'iPhone with CarPlay', href: '/chatgpt-carplay-requirements/' },
-  { label: 'Android Auto', href: '/does-gemini-work-with-android-auto/' },
-  { label: 'Latest rollout notes', href: '/update-tracker/' }
-];
 const setupChoices = [
   { label: 'Vehicle system', text: 'The assistant appears inside the car system or Google built-in dashboard.', href: '#vehicle-system' },
   { label: 'iPhone / CarPlay', text: 'You connect an iPhone and expect ChatGPT, Siri, or app handoff in CarPlay.', href: '#iphone-carplay' },
@@ -113,15 +106,7 @@ const howToSchema = {
         <div class="direct-answer-band">
           <strong>Quick answer:</strong> If your car has <em>Google built-in</em>, check Gemini eligibility. If you have an <em>iPhone with CarPlay</em>, check ChatGPT setup. If you use <em>Android Auto</em>, note it is phone projection, not vehicle-native AI.
         </div>
-        <form class="assistant-search tool-search-card" action="/compatibility-checker/" method="get">
-          <span aria-hidden="true">✦</span>
-          <input name="q" type="search" placeholder="Try: Volvo XC90 with Google built-in" aria-label="Describe your vehicle platform" />
-          <button type="submit">Check</button>
-        </form>
-        <p class="tool-privacy-note">No vehicle data is collected. This guide only routes you to the right checklist.</p>
-        <nav class="quick-pill-row utility-pill-row" aria-label="Common compatibility paths">
-          {toolPills.map((pill) => <a href={pill.href}>{pill.label}</a>)}
-        </nav>
+        <VehicleGuideFinder id="compatibility" variant="dark" heading="Choose brand, model, or platform" lead="Same routing as the homepage: confirmed evidence opens a guide, popular US models without dedicated evidence open the coverage map." />
       </div>
       <aside class="tool-hero-card">
         <img src="/assets/compatibility-map-real.jpg" alt="Daylight compatibility comparison showing built-in Gemini, CarPlay with Gemini on iPhone, and Android Auto with Gemini on Android" />

@@ -1,0 +1,69 @@
+---
+import { popularVehicleShortcuts, vehicleFinderGroups } from '../data/vehicleCoverage';
+
+interface Props {
+  id: string;
+  variant?: 'hero' | 'compact' | 'dark';
+  heading?: string;
+  lead?: string;
+  showShortcuts?: boolean;
+}
+
+const {
+  id,
+  variant = 'hero',
+  heading = 'Check by brand, model, or platform',
+  lead = 'Choose a dedicated guide where evidence exists. Popular US models without a dedicated guide go to the model coverage hub.',
+  showShortcuts = true
+} = Astro.props;
+
+const selectId = `vehicle-guide-select-${id}`;
+const pickerLabelId = `vehicle-guide-label-${id}`;
+---
+<div class:list={['vehicle-finder', `vehicle-finder--${variant}`]} data-vehicle-finder>
+  <div class="vehicle-finder-head">
+    <span>Vehicle guide finder</span>
+    <strong id={pickerLabelId}>{heading}</strong>
+    <p>{lead}</p>
+  </div>
+  <div class="vehicle-finder-control">
+    <label for={selectId}>My vehicle</label>
+    <select id={selectId} data-vehicle-select aria-labelledby={pickerLabelId}>
+      <option value="" disabled selected>Choose brand, model, or platform</option>
+      {vehicleFinderGroups.map((group) => (
+        <optgroup label={group.label}>
+          {group.items.map((item) => (
+            <option value={item.href}>{item.label}</option>
+          ))}
+        </optgroup>
+      ))}
+      <option value="/compatibility-checker/">Not sure / other vehicle</option>
+    </select>
+    <button type="button" data-vehicle-go>Open guide</button>
+  </div>
+  {showShortcuts && (
+    <nav class="vehicle-finder-shortcuts" aria-label="Popular vehicle shortcuts">
+      {popularVehicleShortcuts.map((item) => (
+        <a href={item.href} aria-label={`${item.label}: ${item.evidence}`}>
+          <span>{item.label}</span>
+          <small>{item.evidence}</small>
+        </a>
+      ))}
+    </nav>
+  )}
+  <p class="vehicle-finder-note">No vehicle data is collected. Links are static so users and search crawlers can reach the same guide paths.</p>
+</div>
+<script is:inline>
+  document.querySelectorAll('[data-vehicle-finder]').forEach(function(finder) {
+    var select = finder.querySelector('[data-vehicle-select]');
+    var button = finder.querySelector('[data-vehicle-go]');
+    if (!select || !button || finder.dataset.ready === 'true') return;
+    finder.dataset.ready = 'true';
+    button.addEventListener('click', function() {
+      if (select.value) window.location.href = select.value;
+    });
+    select.addEventListener('change', function() {
+      if (select.value) window.location.href = select.value;
+    });
+  });
+</script>
