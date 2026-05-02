@@ -3,6 +3,8 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { pages } from './src/data/pages.ts';
 
+import cloudflare from "@astrojs/cloudflare";
+
 const site = process.env.PUBLIC_SITE_URL || 'https://aicarassistantguide.com';
 const isoDateToUtc = (date) => new Date(`${date}T00:00:00.000Z`);
 const indexablePageDates = new Map([
@@ -21,6 +23,7 @@ export default defineConfig({
   site,
   output: 'static',
   trailingSlash: 'always',
+
   integrations: [
     mdx(),
     sitemap({
@@ -35,5 +38,7 @@ export default defineConfig({
         };
       }
     })
-  ]
+  ],
+
+  adapter: cloudflare()
 });
