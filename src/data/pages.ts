@@ -143,6 +143,7 @@ const sourceLibrary = {
   openai: { title: 'OpenAI official ChatGPT in CarPlay help article', url: 'https://help.openai.com/en/articles/20001153-using-chatgpt-in-carplay', sourceType: 'product-doc' as const },
   apple: { title: 'Apple official CarPlay setup guide', url: 'https://support.apple.com/guide/iphone/connect-to-carplay-iph6860e6b53/ios', sourceType: 'product-doc' as const },
   anthropic: { title: 'Anthropic product availability information', url: 'https://www.anthropic.com/', sourceType: 'official' as const },
+  kbbSales: { title: 'Kelley Blue Book 2025 best-selling US vehicles list', url: 'https://www.kbb.com/best-cars/top-10-25-best-selling-cars-trucks-suvs/', sourceType: 'reputable-media' as const },
   googleSearch: { title: 'Google Search people-first content guidance', url: 'https://developers.google.com/search/docs/fundamentals/creating-helpful-content', sourceType: 'product-doc' as const }
 };
 
@@ -339,7 +340,7 @@ const p0Overrides: Record<string, Partial<GuidePage>> = {
     ]
   },
   'gm-gemini-update': {
-    metaTitle: 'GM Gemini Update: Eligibility Checks for Cadillac, Chevrolet, Buick, GMC',
+    metaTitle: 'GM Gemini Update: Cadillac, Chevrolet, Buick, GMC Checks',
     shortAnswer: 'For GM owners, the practical Gemini check is: eligible GM brand and model-year group, Google built-in, US rollout context, current infotainment software, signed-in account, supported language, and staged rollout timing. If one of those is missing, Gemini may not appear yet even if the announcement is real.',
     confirmedFacts: [
       'GM rollout notes reference eligible Cadillac, Chevrolet, Buick, and GMC vehicles with Google built-in in the US.',
@@ -775,7 +776,7 @@ const p0Overrides: Record<string, Partial<GuidePage>> = {
     ]
   },
   'polestar-gemini-update': {
-    metaTitle: 'Polestar Gemini Update: Google built-in Rollout Checks for Polestar Owners',
+    metaTitle: 'Polestar Gemini Update: Google built-in Rollout Checks',
     shortAnswer: 'Polestar vehicles with Google built-in are part of the Gemini vehicle-native rollout path. The key checks are Google built-in presence, US market and English language context, current vehicle software, Google account sign-in, and staged rollout timing.',
     confirmedFacts: [
       'Polestar vehicles with Google built-in run Google services natively, including Google Assistant.',
@@ -896,13 +897,14 @@ const p0Overrides: Record<string, Partial<GuidePage>> = {
   },
   'google-built-in-car-models': {
     metaTitle: 'Google built-in Car Models: Gemini Compatibility Checks',
-    shortAnswer: 'Use this model-first hub when you know your car model but not the assistant path. Official sources currently support clear checks for GM 2022+ Google built-in vehicles, Volvo Google built-in models dating back to 2020, Polestar models with Google built-in, and model examples such as Honda Passport, Lincoln Nautilus, and Renault 5. Popular US models such as Ford F-Series, Toyota RAV4, Honda CR-V, Ram pickup, Tesla Model Y, Toyota Camry, and Toyota Tacoma should be checked by platform first unless a dedicated official Gemini source names them.',
+    shortAnswer: 'Use this model-first hub when you know your car model but not the assistant path. Official sources currently support clear checks for GM 2022+ Google built-in vehicles, Volvo Google built-in models dating back to 2020, Polestar models with Google built-in, and model examples such as Honda Passport, Lincoln Nautilus, and Renault 5. Popular US models such as Ford F-Series, Silverado, RAV4, CR-V, Ram, Tesla Model Y, Camry, Tacoma, Hyundai Tucson, Nissan Rogue, BMW X5, Mercedes GLC, VW Atlas, and Audi Q5 should be checked by platform first unless a dedicated official Gemini source names them.',
     confirmedFacts: [
       'Google built-in is vehicle-native software and is different from Android Auto phone projection.',
       'GM names eligible model year 2022 and newer Cadillac, Chevrolet, Buick, and GMC vehicles in the US with Google built-in.',
       'Volvo names a specific Google built-in model list for Gemini introduction, including XC, EX, EC, S, V, and ES models.',
       'Google official Android for Cars guidance names Lincoln Nautilus, Renault R5, and Honda Passport as Google built-in model examples for Gemini rollout context.',
-      'Popular US vehicles without a dedicated Gemini source should stay in the coverage map, not become thin model pages.'
+      'Popular US vehicles without a dedicated Gemini source should stay in the coverage map, not become thin model pages.',
+      'Kelley Blue Book and Cox/Automotive News data show US demand remains concentrated around pickups, compact SUVs, family crossovers, EVs, and a smaller luxury group, so the map prioritizes those model families first.'
     ],
     uncertainAreas: [
       'A named model may still wait for regional, language, account, or OTA rollout activation.',
@@ -918,6 +920,7 @@ const p0Overrides: Record<string, Partial<GuidePage>> = {
       'Start with your exact brand, model, model year, trim, and country.',
       'Check whether the car has Google built-in without a phone connected.',
       'If it is a GM, Volvo, Polestar, Honda Passport, Lincoln Nautilus, or Renault 5 case, open the matching guide.',
+      'If it is a Ford, Toyota, Tesla, Hyundai, Kia, Nissan, Subaru, Mazda, Jeep, Ram, BMW, Mercedes-Benz, Volkswagen, Audi, Rivian, or Lucid model, use the coverage map row before assuming support.',
       'If your car only has CarPlay or Android Auto, use the phone-projection guides instead.',
       'Install vehicle software updates while parked.',
       'Check Google account, language, region, and rollout prompt before resetting anything.'
@@ -938,15 +941,17 @@ const p0Overrides: Record<string, Partial<GuidePage>> = {
       { question: 'Why include models that are not active everywhere?', answer: 'Because drivers search by exact model. The useful answer is often whether the model belongs in the vehicle-native Google built-in path, not a blanket yes.' },
       { question: 'What if my brand is not listed?', answer: 'Use the compatibility checker. If your car has only CarPlay or Android Auto, start with the phone-projection guides rather than Gemini vehicle-native pages.' }
     ],
-    sources: [sourceLibrary.googleGeminiCars, sourceLibrary.googleAndroidCars2025, sourceLibrary.gm, sourceLibrary.volvoGemini, sourceLibrary.polestar, sourceLibrary.hondaPassport, sourceLibrary.lincolnNautilus, sourceLibrary.renault5],
+    sources: [sourceLibrary.googleGeminiCars, sourceLibrary.googleAndroidCars2025, sourceLibrary.gm, sourceLibrary.volvoGemini, sourceLibrary.polestar, sourceLibrary.hondaPassport, sourceLibrary.lincolnNautilus, sourceLibrary.renault5, sourceLibrary.kbbSales],
     infoGain: [
       { label: 'Model-first routing', text: 'This page changes the site from a mostly platform-first guide into a model-aware guide. It gives users a place to start when they know the car name but not the infotainment platform.' },
       { label: 'Evidence label by model family', text: 'GM and Volvo have stronger official rollout language, while Honda Passport, Lincoln Nautilus, and Renault 5 currently rely on Google model examples plus automaker Google built-in evidence. The page keeps those evidence levels separate.' },
-      { label: 'US market coverage without thin pages', text: 'The coverage map includes high-demand US brands and models such as Ford F-Series, Toyota RAV4, Honda CR-V, Ram pickup, Tesla Model Y, Toyota Camry, and Toyota Tacoma, but routes unsupported models to platform checks instead of creating unsupported model pages.' }
+      { label: 'US market coverage without thin pages', text: 'The coverage map includes high-demand US brands and models such as Ford F-Series, Chevrolet Silverado, Toyota RAV4, Honda CR-V, Ram pickup, Tesla Model Y, Toyota Camry, Toyota Tacoma, Hyundai Tucson, Nissan Rogue, Jeep Grand Cherokee, Subaru Outback, BMW X5, Mercedes GLC, Audi Q5, Volkswagen Atlas, Rivian R1S, and Lucid Air, but routes unsupported models to platform checks instead of creating unsupported model pages.' },
+      { label: 'Dedicated guide threshold', text: 'A model gets a separate page only when there is official assistant or Google built-in evidence strong enough to support a unique checklist. Otherwise the model remains in this map so users still find a route without adding doorway pages.' }
     ],
     verificationLog: [
       { date: '2026-05-02', action: 'Reviewed official model coverage sources', result: 'Confirmed GM 2022+ language, Volvo model list, and Google examples naming Lincoln Nautilus, Renault R5, and Honda Passport.' },
-      { date: '2026-05-02', action: 'Checked automaker Google built-in pages', result: 'Honda Passport, Lincoln Nautilus, and Renault 5 official pages show Google built-in or Google app/service support needed for the vehicle-native path.' }
+      { date: '2026-05-02', action: 'Checked automaker Google built-in pages', result: 'Honda Passport, Lincoln Nautilus, and Renault 5 official pages show Google built-in or Google app/service support needed for the vehicle-native path.' },
+      { date: '2026-05-02', action: 'Expanded US model coverage using sales-demand signals', result: 'Added coverage-map rows for additional US mainstream, luxury, EV, and Stellantis model families without creating unsupported model pages.' }
     ],
     evidenceRefs: [
       { label: 'Google Android for Cars model examples', desc: 'Google names Lincoln Nautilus, Renault R5, and Honda Passport in Gemini for cars context.', type: 'changelog' },
@@ -1055,7 +1060,10 @@ const p0Overrides: Record<string, Partial<GuidePage>> = {
     sources: [sourceLibrary.hondaPassport, sourceLibrary.googleAndroidCars2025, sourceLibrary.googleGeminiCars, sourceLibrary.googleBuiltIn],
     infoGain: [
       { label: 'Passport-specific platform split', text: 'The Passport can have Google built-in, wireless Android Auto, and wireless CarPlay. This page separates those three paths so owners do not troubleshoot the wrong layer.' },
-      { label: 'Model example vs live activation', text: 'Google naming Honda Passport is meaningful, but this page avoids turning a model example into a universal live-support claim.' }
+      { label: 'Model example vs live activation', text: 'Google naming Honda Passport is meaningful, but this page avoids turning a model example into a universal live-support claim.' },
+      { label: 'Passport vs other Honda models', text: 'Honda CR-V, Accord, Civic, Pilot, and Prologue owners should not copy the Passport checklist blindly. Those models belong in the coverage map until official Google built-in Gemini evidence names the exact model and trim.' },
+      { label: 'Dashboard check for shoppers', text: 'For a Passport test drive, look for native Google Maps, Google Play, and Google account sign-in in the Honda screen before connecting a phone. Wireless Android Auto or CarPlay alone is not the same evidence.' },
+      { label: 'Trim and purchase boundary', text: 'This page is strongest for 2026 Passport shoppers comparing infotainment capability. It is not a general Honda Gemini page, and it should not be used as proof for older Passport generations.' }
     ],
     verificationLog: [
       { date: '2026-05-02', action: 'Checked Honda official Passport technology page', result: 'Honda lists standard Google built-in and wireless smartphone compatibility.' },
@@ -1112,7 +1120,12 @@ const p0Overrides: Record<string, Partial<GuidePage>> = {
     sources: [sourceLibrary.lincolnNautilus, sourceLibrary.googleAndroidCars2025, sourceLibrary.googleGeminiCars, sourceLibrary.googleBuiltIn],
     infoGain: [
       { label: 'Lincoln software-layer distinction', text: 'This page separates Lincoln Digital Experience from CarPlay and Android Auto, which prevents owners from treating all three as the same assistant path.' },
-      { label: 'Google example without overclaiming', text: 'The page uses the Google Lincoln Nautilus example as model-level evidence, but keeps activation status conditional on rollout state and official prompts.' }
+      { label: 'Google example without overclaiming', text: 'The page uses the Google Lincoln Nautilus example as model-level evidence, but keeps activation status conditional on rollout state and official prompts.' },
+      { label: 'Nautilus display and software context', text: 'The Nautilus check starts with Lincoln Digital Experience, Google apps and services, and the wide dashboard display environment. That makes this page different from generic Ford, Android Auto, or CarPlay troubleshooting.' },
+      { label: 'Google Assistant wording bridge', text: 'Lincoln pages may still describe Google Assistant while Google describes Gemini rollout examples. This page tells owners not to treat that wording mismatch as a final no or a guaranteed yes.' },
+      { label: 'Used-vehicle buyer check', text: 'For used Nautilus shoppers, the practical question is whether the specific vehicle has active connected services, a supported Google account path, and current software, not just whether the model name appears in an article.' },
+      { label: 'Lincoln owner profile path', text: 'Nautilus owners should check the signed-in owner profile, connected-service state, and Google app availability inside Lincoln Digital Experience. A dealer demo screen or guest profile may not show the same assistant state as the real owner account.' },
+      { label: 'Why this is not a Renault-style check', text: 'The Nautilus evidence comes from Lincoln Digital Experience and Google model examples. It is not an EV charging or openR link question, so the practical checks stay focused on Lincoln software, account state, language, and connected services.' }
     ],
     verificationLog: [
       { date: '2026-05-02', action: 'Checked Lincoln official Nautilus page', result: 'Lincoln Digital Experience and Google apps/services language captured.' },
@@ -1169,7 +1182,12 @@ const p0Overrides: Record<string, Partial<GuidePage>> = {
     sources: [sourceLibrary.renault5, sourceLibrary.googleAndroidCars2025, sourceLibrary.googleGeminiCars, sourceLibrary.googleBuiltIn],
     infoGain: [
       { label: 'EV-specific model context', text: 'Renault 5 is not just another Google built-in example. It is an EV where Google Maps charging and connected-services behavior can directly affect trip planning expectations.' },
-      { label: 'Connected-services dependency', text: 'This page calls out Renault connected services and data access because Google built-in app behavior depends on connectivity, not only the infotainment label.' }
+      { label: 'Connected-services dependency', text: 'This page calls out Renault connected services and data access because Google built-in app behavior depends on connectivity, not only the infotainment label.' },
+      { label: 'openR link evidence boundary', text: 'The Renault 5 path depends on openR link with Google built-in. Android Auto phone projection, Bluetooth audio, or a generic Renault app screen should not be treated as the same evidence.' },
+      { label: 'US priority note', text: 'Renault 5 is lower priority for US shoppers than Ford, Toyota, Honda, Chevrolet, Tesla, Hyundai, Kia, Nissan, or Subaru models. It remains useful because Google named Renault R5 as a model example and Renault has a clear Google built-in story.' },
+      { label: 'EV trip planning angle', text: 'This guide connects Google built-in to charging stops, map data, account sign-in, and connected services. That EV travel angle is the main reason it deserves a separate checklist instead of being merged into the generic model map.' },
+      { label: 'Renault market boundary', text: 'Renault 5 checks should be read as Renault and Google built-in evidence, not as a US availability guide. US readers usually need Ford, Toyota, Chevrolet, Honda, Hyundai, Kia, Nissan, Subaru, Tesla, Jeep, Ram, or luxury-brand rows first.' },
+      { label: 'Charging-data dependency', text: 'For a Renault 5 owner, Google Maps charger search, route planning, data connectivity, and connected-services terms matter more than a generic assistant label. Those EV-specific checks are separate from Lincoln Nautilus or Honda Passport ownership checks.' }
     ],
     verificationLog: [
       { date: '2026-05-02', action: 'Checked Renault 5 official technology page', result: 'openR link with Google built-in, Google Maps, voice control, and Google Play app support captured.' },
@@ -1353,7 +1371,7 @@ const p0Overrides: Record<string, Partial<GuidePage>> = {
     ]
   },
   'google-built-in-vs-android-auto': {
-    metaTitle: 'Google built-in vs Android Auto: Why the Difference Matters for AI Assistants',
+    metaTitle: 'Google built-in vs Android Auto: AI Assistant Differences',
     shortAnswer: 'Google built-in means Google services run directly in the vehicle hardware. Android Auto projects your phone apps to the car screen. This distinction determines which AI assistant path your car supports, what features are available, and how to troubleshoot problems.',
     confirmedFacts: [
       'Google built-in vehicles have native Google Maps, Play Store, and Google Assistant without requiring a phone.',
@@ -1646,7 +1664,7 @@ const p0Overrides: Record<string, Partial<GuidePage>> = {
     ]
   },
   'ai-voice-assistant-safety-while-driving': {
-    metaTitle: 'AI Voice Assistant Safety While Driving: Rules Every Driver Should Follow',
+    metaTitle: 'AI Voice Assistant Safety While Driving: Driver Rules',
     shortAnswer: 'The single most important rule: if an AI assistant interaction requires looking at, reading, or touching a screen, do it while parked. Voice-first use is the only acceptable pattern while driving. Setup, troubleshooting, and configuration should never happen while the vehicle is in motion.',
     confirmedFacts: [
       'Distracted driving is a leading cause of accidents, and screen interaction is a primary distraction source.',
@@ -2181,7 +2199,7 @@ const p0Overrides: Record<string, Partial<GuidePage>> = {
     ]
   },
   'future-ai-assistants-in-cars': {
-    metaTitle: 'Future AI Assistants in Cars: Claude, Perplexity, and Other Status Updates',
+    metaTitle: 'Future AI Assistants in Cars: Claude and Perplexity Status',
     shortAnswer: 'As of the last update, no AI assistant beyond ChatGPT (CarPlay) and Gemini/Google Assistant (Google built-in, Android Auto) has confirmed car or CarPlay integration. Claude, Perplexity, and other AI assistants have mobile apps but no official vehicle or CarPlay support.',
     confirmedFacts: [
       'Claude (Anthropic) has a mobile app but no confirmed CarPlay or vehicle integration.',
@@ -2290,7 +2308,7 @@ const p0Overrides: Record<string, Partial<GuidePage>> = {
     ]
   },
   'editorial-policy': {
-    metaTitle: 'Editorial Policy: How AI Car Assistant Guide Maintains Accuracy and Safety',
+    metaTitle: 'Editorial Policy: Source Accuracy and Safety',
     shortAnswer: 'Our editorial policy defines how we separate confirmed information from possible explanations, how AI-assisted drafting is reviewed by humans, how sources are evaluated, and why driver safety is the baseline requirement for every guide.',
     confirmedFacts: [
       'All content is reviewed by human editors before publication.',
@@ -2342,7 +2360,7 @@ const p0Overrides: Record<string, Partial<GuidePage>> = {
     ]
   },
   'methodology': {
-    metaTitle: 'How We Check AI Car Assistant Features: Source Verification and Accuracy',
+    metaTitle: 'How We Check AI Car Assistant Features',
     shortAnswer: 'We check AI car assistant features by cross-referencing official automaker pages, platform documentation, product help centers, and reputable media reports. Claims are labeled by confidence level. We do not fabricate testing experiences or present speculation as fact.',
     confirmedFacts: [
       'Official automaker and platform documentation is the highest-confidence source.',

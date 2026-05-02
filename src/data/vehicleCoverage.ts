@@ -268,6 +268,138 @@ export const vehicleCoverageItems: VehicleCoverageItem[] = [
     marketFit: 'medium-us-fit'
   },
   {
+    brand: 'BMW',
+    model: 'X3, X5, X7, 3 Series, i4',
+    label: 'BMW X3 / X5',
+    href: '/google-built-in-car-models/#us-popular-models',
+    platform: 'Check platform first',
+    evidence: 'Common US luxury brand; no dedicated Gemini vehicle guide yet',
+    nextStep: 'Check native infotainment, CarPlay, Android Auto, and BMW software path before assuming Google built-in.',
+    tier: 'coverage-hub',
+    marketFit: 'high-us-fit'
+  },
+  {
+    brand: 'Mercedes-Benz',
+    model: 'GLC, GLE, GLS, C-Class, E-Class',
+    label: 'Mercedes GLC / GLE',
+    href: '/google-built-in-car-models/#us-popular-models',
+    platform: 'Check platform first',
+    evidence: 'Common US luxury brand; no dedicated Gemini vehicle guide yet',
+    nextStep: 'Check whether the assistant path is Mercedes software, phone projection, or an official Google built-in setup.',
+    tier: 'coverage-hub',
+    marketFit: 'high-us-fit'
+  },
+  {
+    brand: 'Volkswagen',
+    model: 'Tiguan, Atlas, Jetta, ID.4',
+    label: 'Volkswagen Tiguan / Atlas',
+    href: '/google-built-in-car-models/#us-popular-models',
+    platform: 'Check platform first',
+    evidence: 'Common US brand; no dedicated Gemini vehicle guide yet',
+    nextStep: 'Check CarPlay, Android Auto, and native infotainment before treating Gemini as vehicle-native.',
+    tier: 'coverage-hub',
+    marketFit: 'high-us-fit'
+  },
+  {
+    brand: 'Audi',
+    model: 'Q5, Q7, Q3, A4, e-tron',
+    label: 'Audi Q5 / Q7',
+    href: '/google-built-in-car-models/#us-popular-models',
+    platform: 'Check platform first',
+    evidence: 'Common US luxury brand; no dedicated Gemini vehicle guide yet',
+    nextStep: 'Use the hub to separate Audi native software from CarPlay, Android Auto, and Google built-in claims.',
+    tier: 'coverage-hub',
+    marketFit: 'medium-us-fit'
+  },
+  {
+    brand: 'Dodge',
+    model: 'Durango, Charger, Hornet',
+    label: 'Dodge Durango / Charger',
+    href: '/google-built-in-car-models/#us-popular-models',
+    platform: 'Check platform first',
+    evidence: 'Common US Stellantis brand; no dedicated Gemini vehicle guide yet',
+    nextStep: 'Check CarPlay, Android Auto, and vehicle software before assuming a native Gemini path.',
+    tier: 'coverage-hub',
+    marketFit: 'medium-us-fit'
+  },
+  {
+    brand: 'Chrysler',
+    model: 'Pacifica, Voyager',
+    label: 'Chrysler Pacifica',
+    href: '/google-built-in-car-models/#us-popular-models',
+    platform: 'Check platform first',
+    evidence: 'Common US minivan search; no dedicated Gemini vehicle guide yet',
+    nextStep: 'Start with phone-projection checks unless official Google built-in evidence appears for your exact vehicle.',
+    tier: 'coverage-hub',
+    marketFit: 'medium-us-fit'
+  },
+  {
+    brand: 'Genesis',
+    model: 'GV70, GV80, G80, Electrified GV70',
+    label: 'Genesis GV70 / GV80',
+    href: '/google-built-in-car-models/#us-popular-models',
+    platform: 'Check platform first',
+    evidence: 'Growing US luxury brand; no dedicated Gemini vehicle guide yet',
+    nextStep: 'Check Genesis native assistant, CarPlay, Android Auto, and official Google built-in support separately.',
+    tier: 'coverage-hub',
+    marketFit: 'medium-us-fit'
+  },
+  {
+    brand: 'Infiniti',
+    model: 'QX60, QX80, QX50',
+    label: 'Infiniti QX60 / QX80',
+    href: '/google-built-in-car-models/#us-popular-models',
+    platform: 'Check platform first',
+    evidence: 'Common US luxury search; no dedicated Gemini vehicle guide yet',
+    nextStep: 'Use platform checks before treating phone projection or native infotainment as Gemini support.',
+    tier: 'coverage-hub',
+    marketFit: 'medium-us-fit'
+  },
+  {
+    brand: 'Mitsubishi',
+    model: 'Outlander, Outlander PHEV, Eclipse Cross',
+    label: 'Mitsubishi Outlander',
+    href: '/google-built-in-car-models/#us-popular-models',
+    platform: 'Check platform first',
+    evidence: 'Common US crossover search; no dedicated Gemini vehicle guide yet',
+    nextStep: 'Check CarPlay and Android Auto first unless official Google built-in evidence names your exact model.',
+    tier: 'coverage-hub',
+    marketFit: 'medium-us-fit'
+  },
+  {
+    brand: 'Rivian',
+    model: 'R1T, R1S',
+    label: 'Rivian R1T / R1S',
+    href: '/google-built-in-car-models/#us-popular-models',
+    platform: 'Vehicle-native Rivian software',
+    evidence: 'Popular EV search; no dedicated Gemini vehicle guide yet',
+    nextStep: 'Check Rivian native software and phone-based assistants rather than assuming Google built-in Gemini.',
+    tier: 'coverage-hub',
+    marketFit: 'medium-us-fit'
+  },
+  {
+    brand: 'Lucid',
+    model: 'Air, Gravity',
+    label: 'Lucid Air / Gravity',
+    href: '/google-built-in-car-models/#us-popular-models',
+    platform: 'Vehicle-native Lucid software',
+    evidence: 'EV luxury search; no dedicated Gemini vehicle guide yet',
+    nextStep: 'Check Lucid native software and phone projection paths before assuming vehicle-native Gemini.',
+    tier: 'coverage-hub',
+    marketFit: 'low-us-fit'
+  },
+  {
+    brand: 'Porsche',
+    model: 'Macan, Cayenne, Taycan',
+    label: 'Porsche Macan / Cayenne',
+    href: '/google-built-in-car-models/#us-popular-models',
+    platform: 'Check platform first',
+    evidence: 'Luxury performance search; no dedicated Gemini vehicle guide yet',
+    nextStep: 'Check Porsche native infotainment, CarPlay, Android Auto, and official Google built-in evidence separately.',
+    tier: 'coverage-hub',
+    marketFit: 'low-us-fit'
+  },
+  {
     brand: 'iPhone',
     model: 'CarPlay',
     label: 'iPhone with CarPlay',

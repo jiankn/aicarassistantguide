@@ -74,9 +74,19 @@ const hasEvidence = evidenceRefs.length > 0;
 const shouldIncludeFaqSchema = isArticleSchema && page.faqs.length > 0;
 const structuredData = shouldIncludeFaqSchema ? [pageSchema, breadcrumbSchema, faqSchema] : [pageSchema, breadcrumbSchema];
 const isContactPage = page.slug === 'contact';
+const noindexUtilityPages = new Set(['contact', 'privacy-policy', 'terms']);
+const robots = noindexUtilityPages.has(page.slug) ? 'noindex,follow' : undefined;
 const correctionMailto = `mailto:${contactEmail}?subject=${encodeURIComponent('Correction for AI Car Assistant Guide')}&body=${encodeURIComponent('Page URL:\nIssue or suggested update:\nOfficial source URL:\nVehicle brand/model/model year/region if relevant:\n')}`;
+const firstRelated = related[0];
+const statusFitText = {
+  confirmed: 'Use it as a direct checklist, then verify your exact vehicle, phone, account, and app state before changing settings.',
+  'partially-confirmed': 'Use it to separate confirmed platform facts from changing or incomplete rollout behavior.',
+  'not-confirmed': 'Use it to avoid acting on rumors or future-feature assumptions until an official source names support.',
+  'rollout-in-progress': 'Use it to check eligibility and staged rollout conditions without assuming every matching vehicle is already active.'
+}[page.status];
 const toc = [
   ['confirmed', 'Confirmed vs possible'],
+  ['fit', 'Use this guide when'],
   ...(isContactPage ? [['send-correction', 'Send a correction']] : []),
   ...(hasInfoGain ? [['info-gain', 'Only-on-this-page insights']] : []),
   ...(showModelCoverageMap ? [['us-popular-models', 'US model coverage map']] : []),
@@ -89,7 +99,7 @@ const toc = [
   ...((hasVerLog || hasEvidence) ? [['verification', 'Verification log']] : [])
 ];
 ---
-<BaseLayout title={page.metaTitle} description={page.description} pathname={canonicalPath} image={page.heroImage} structuredData={structuredData} ogType={isArticleSchema ? 'article' : 'website'}>
+<BaseLayout title={page.metaTitle} description={page.description} pathname={canonicalPath} image={page.heroImage} robots={robots} structuredData={structuredData} ogType={isArticleSchema ? 'article' : 'website'}>
   <section class="article-v2-hero">
     <div class="container article-v2-hero-grid">
       <div class="article-v2-copy">
@@ -147,6 +157,25 @@ const toc = [
             <span>Possible or not fully public</span>
             {page.uncertainAreas.map((area) => <p>{area}</p>)}
           </div>
+        </div>
+      </section>
+      <section id="fit" class="article-section">
+        <h2>Use this guide when</h2>
+        <div class="fact-grid">
+          <div class="fact-card">
+            <span>Reader job</span>
+            <p>This guide is for {page.audience}. It focuses on how to {page.focus}.</p>
+          </div>
+          <div class="fact-card">
+            <span>Status boundary</span>
+            <p>{statusFitText}</p>
+          </div>
+          {firstRelated && (
+          <div class="fact-card">
+            <span>If this is not your setup</span>
+            <p>Open <a href={`/${firstRelated.slug}/`}>{firstRelated.title}</a> or use the compatibility checker before troubleshooting the wrong platform.</p>
+          </div>
+          )}
         </div>
       </section>
       {isContactPage && (
