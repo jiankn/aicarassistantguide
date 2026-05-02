@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout
+  title="Page Not Found — AI Car Assistant Guide"
+  description="The page you are looking for does not exist. Use the links below to find the right guide."
+>
+  <section class="error-page">
+    <div class="container">
+      <h1>Page not found</h1>
+      <p>The page you requested does not exist or may have moved.</p>
+      <nav aria-label="Suggested pages">
+        <ul>
+          <li><a href="/">Home — AI Car Assistant Guide</a></li>
+          <li><a href="/gemini-in-cars/">Gemini in Cars hub</a></li>
+          <li><a href="/chatgpt-carplay/">ChatGPT in CarPlay hub</a></li>
+          <li><a href="/google-built-in-car-models/">Google built-in car models</a></li>
+          <li><a href="/compatibility-checker/">Compatibility checker</a></li>
+          <li><a href="/update-tracker/">Update tracker</a></li>
+        </ul>
+      </nav>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .error-page {
+    padding: 4rem 0 6rem;
+    text-align: center;
+  }
+  .error-page h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  .error-page p {
+    color: var(--text-muted, #6b7280);
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+  }
+  .error-page ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+  }
+  .error-page a {
+    color: var(--accent, #2563eb);
+    text-decoration: underline;
+    font-weight: 500;
+  }
+</style>
