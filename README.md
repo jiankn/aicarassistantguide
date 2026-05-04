@@ -7,7 +7,7 @@ Static-first Astro site for practical English guides about Gemini in cars, ChatG
 - Astro static output
 - Tailwind CSS
 - MDX-ready configuration
-- Cloudflare Pages target
+- Cloudflare Workers static assets target
 - Sitemap and RSS support
 - GA4, GSC, and AdSense Auto Ads via environment variables
 
@@ -17,6 +17,21 @@ Static-first Astro site for practical English guides about Gemini in cars, ChatG
 pnpm install
 pnpm dev
 pnpm build
+```
+
+## Cloudflare deployment
+
+This is a static Astro site deployed through Cloudflare Workers static assets.
+
+```bash
+pnpm build
+pnpm run deploy:cloudflare
+```
+
+Cloudflare's Workers Builds deploy command can remain:
+
+```bash
+npx wrangler deploy
 ```
 
 ## Environment variables
