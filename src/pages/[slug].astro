@@ -2,6 +2,9 @@
 import ArticleLayout from '../layouts/ArticleLayout.astro';
 import { articlePages } from '../data/pages';
 
+// Note: `articlePages` already excludes slugs removed in PRD v2 phase 1
+// (see `removedSlugs` in src/data/pages.ts). Those URLs are 301-redirected
+// via public/_redirects.
 export function getStaticPaths() {
   return articlePages.map((page) => ({
     params: { slug: page.slug },

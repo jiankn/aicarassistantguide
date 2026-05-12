@@ -25,7 +25,7 @@ export const updates: UpdateItem[] = [
     impact: 'Volvo owners should check exact model name, Google built-in, active in-car internet, US English Google Account, market, and staged rollout timing before troubleshooting.',
     action: 'Open the Volvo model guide if you own a Volvo with Google built-in. Use the broader model coverage hub if your car is not a Volvo.',
     confidence: 'high',
-    relatedHref: '/volvo-gemini-supported-models/',
+    relatedHref: '/google-built-in-car-models/#us-popular-models',
     image: '/assets/gemini-dashboard-real.jpg'
   },
   {
@@ -39,7 +39,7 @@ export const updates: UpdateItem[] = [
     impact: 'Drivers should check whether their vehicle has Google built-in, whether they are signed into a Google Account in the car, and whether the dashboard shows an upgrade prompt.',
     action: 'Use the Google built-in Gemini guide first if your car has native Google services. Use Android Auto guidance if the assistant runs from your phone.',
     confidence: 'high',
-    relatedHref: '/google-built-in-gemini/',
+    relatedHref: '/gemini-in-cars/',
     image: '/assets/gemini-dashboard-real.jpg'
   },
   {

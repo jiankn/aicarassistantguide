@@ -1,0 +1,54 @@
+# 301 redirects — Phase 1 page consolidation (PRD v2)
+# Syntax: <from> <to> <status>
+# Workers Static Assets expects a numeric status code.
+# Last updated: 2026-05-12
+
+# --- Listicle / anti-pattern pages ---
+/best-ai-assistants-for-carplay/        /gemini-vs-google-assistant-in-cars/    301
+/best-ai-assistants-for-cars/           /gemini-vs-google-assistant-in-cars/    301
+
+# --- Topic was officially denied or is unconfirmed ---
+/gemini-carplay/                        /chatgpt-carplay-vs-gemini-in-cars/     301
+/gemini-live-in-car/                    /update-tracker/                        301
+/future-ai-assistants-in-cars/          /update-tracker/                        301
+
+# --- Duplicate troubleshooting pages ---
+/chatgpt-carplay-not-working/           /chatgpt-carplay-not-showing/           301
+/chatgpt-carplay-voice-not-working/     /chatgpt-carplay-not-showing/           301
+
+# --- Duplicate comparison / Q&A pages ---
+/can-chatgpt-replace-siri-in-carplay/   /chatgpt-carplay-vs-siri/               301
+/does-gemini-require-google-built-in/   /google-built-in-vs-android-auto/       301
+
+# --- Question pages now answered by the interactive tool ---
+/does-my-car-have-google-built-in/      /compatibility-checker/                 301
+
+# --- Duplicate hubs and how-to pages ---
+/gm-gemini-supported-vehicles/          /gm-gemini-update/                      301
+/google-built-in-gemini/                /gemini-in-cars/                        301
+/how-to-enable-gemini-in-your-car/      /gemini-in-cars/                        301
+
+# --- Phase 2: brand-specific Google-built-in pages → unified model hub ---
+/volvo-gemini-supported-models/         /google-built-in-car-models/#us-popular-models    301
+/honda-passport-gemini-google-built-in/ /google-built-in-car-models/#us-popular-models    301
+/lincoln-nautilus-gemini-google-built-in/ /google-built-in-car-models/#us-popular-models  301
+/renault-5-gemini-google-built-in/      /google-built-in-car-models/#us-popular-models    301
+
+# Trailing-slash variants (defensive)
+/best-ai-assistants-for-carplay         /gemini-vs-google-assistant-in-cars/    301
+/best-ai-assistants-for-cars            /gemini-vs-google-assistant-in-cars/    301
+/gemini-carplay                         /chatgpt-carplay-vs-gemini-in-cars/     301
+/gemini-live-in-car                     /update-tracker/                        301
+/future-ai-assistants-in-cars           /update-tracker/                        301
+/chatgpt-carplay-not-working            /chatgpt-carplay-not-showing/           301
+/chatgpt-carplay-voice-not-working      /chatgpt-carplay-not-showing/           301
+/can-chatgpt-replace-siri-in-carplay    /chatgpt-carplay-vs-siri/               301
+/does-gemini-require-google-built-in    /google-built-in-vs-android-auto/       301
+/does-my-car-have-google-built-in       /compatibility-checker/                 301
+/gm-gemini-supported-vehicles           /gm-gemini-update/                      301
+/google-built-in-gemini                 /gemini-in-cars/                        301
+/how-to-enable-gemini-in-your-car       /gemini-in-cars/                        301
+/volvo-gemini-supported-models          /google-built-in-car-models/#us-popular-models    301
+/honda-passport-gemini-google-built-in  /google-built-in-car-models/#us-popular-models    301
+/lincoln-nautilus-gemini-google-built-in /google-built-in-car-models/#us-popular-models   301
+/renault-5-gemini-google-built-in       /google-built-in-car-models/#us-popular-models    301

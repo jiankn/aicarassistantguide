@@ -4,6 +4,17 @@ import StatusBadge from '../components/StatusBadge.astro';
 import { updates, siteChangelog } from '../data/updates';
 import { getPage } from '../data/pages';
 import { site } from '../data/site';
+import {
+  activeWeeklyReports,
+  latestWeeklyReport,
+  recentDriverReports,
+  weeklyHref
+} from '../data/weeklyReports';
+import { reportCategoryLabel, reportCategoryTone, reportSourceLabel } from '../data/driverReports';
+
+const latestWeekly = latestWeeklyReport();
+const allWeeklies = activeWeeklyReports();
+const recentReports = recentDriverReports(30);
 
 const page = getPage('update-tracker');
 const trackerRules = [
@@ -67,7 +78,7 @@ const itemListSchema = {
         <div class="meta-row"><StatusBadge status="confirmed" /><span>Last updated {featuredUpdate.date}</span></div>
         <nav class="quick-pill-row utility-pill-row" aria-label="Update tracker shortcuts">
           <a href="/google-built-in-car-models/">Model coverage</a>
-          <a href="/volvo-gemini-supported-models/">Volvo Gemini</a>
+          <a href="/google-built-in-car-models/#us-popular-models">Volvo Gemini</a>
           <a href="/gm-gemini-update/">GM Gemini</a>
           <a href="/chatgpt-carplay/">CarPlay AI</a>
           <a href="/google-built-in-vs-android-auto/">Platform changes</a>
@@ -83,6 +94,98 @@ const itemListSchema = {
       </aside>
     </div>
   </section>
+
+  {latestWeekly && (
+    <section class="weekly-spotlight">
+      <div class="container weekly-spotlight-grid">
+        <div class="weekly-spotlight-meta">
+          <span class="eyebrow">This week's tracker · #{latestWeekly.number}</span>
+          <h2><a href={weeklyHref(latestWeekly)}>{latestWeekly.title}</a></h2>
+          <p class="weekly-spotlight-dates">
+            <time datetime={latestWeekly.weekOf}>{latestWeekly.weekOf}</time>
+            <span aria-hidden="true">→</span>
+            <time datetime={latestWeekly.weekEnd}>{latestWeekly.weekEnd}</time>
+            <span aria-hidden="true">·</span>
+            <span>Published {latestWeekly.publishedAt}</span>
+          </p>
+          <p>{latestWeekly.summary}</p>
+          <a class="weekly-spotlight-cta" href={weeklyHref(latestWeekly)}>Read week #{latestWeekly.number} →</a>
+        </div>
+        <aside class="weekly-spotlight-watching">
+          <strong>Watching next week</strong>
+          <ul>
+            {latestWeekly.watching.slice(0, 3).map((w) => <li>{w.topic}</li>)}
+          </ul>
+        </aside>
+      </div>
+    </section>
+  )}
+
+  <section class="driver-reports-section">
+    <div class="container">
+      <div class="tool-section-heading">
+        <div>
+          <span>Driver reports · last 30 days</span>
+          <h2>What real drivers are seeing right now</h2>
+        </div>
+        <a href="mailto:corrections@aicarassistantguide.com?subject=Driver%20report" class="driver-reports-cta">📨 Submit a report</a>
+      </div>
+      {recentReports.length === 0 ? (
+        <div class="driver-reports-empty">
+          <p><strong>No driver reports logged yet.</strong> The first scanning cycle for r/CarPlay, r/Cadillac, r/Polestar, X, and owners forums runs this week.</p>
+          <p>If you have a public post about your AI car assistant working — or not — email <a href="mailto:corrections@aicarassistantguide.com">corrections@aicarassistantguide.com</a> with brand, model, year, platform, and a public link.</p>
+        </div>
+      ) : (
+        <ul class="driver-reports-grid">
+          {recentReports.slice(0, 9).map((r) => (
+            <li class={`driver-report-card tone-${reportCategoryTone[r.category]}`}>
+              <div class="driver-report-head">
+                <span class="driver-report-tag">{reportCategoryLabel[r.category]}</span>
+                <time datetime={r.date}>{r.date}</time>
+              </div>
+              <h3>{r.brand}{r.model ? ` ${r.model}` : ''}{r.year ? ` (${r.year})` : ''}</h3>
+              <p>{r.summary}</p>
+              {r.quote && <blockquote>"{r.quote}"</blockquote>}
+              <p class="driver-report-source">
+                Source: <a href={r.sourceUrl} rel="noopener nofollow" target="_blank">{r.sourceLabel || reportSourceLabel[r.source]}</a>
+              </p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+
+  {allWeeklies.length > 0 && (
+    <section class="weekly-archive-section">
+      <div class="container">
+        <div class="tool-section-heading">
+          <div>
+            <span>Weekly archive</span>
+            <h2>All weekly tracker reports</h2>
+          </div>
+          <a href="/rss.xml">RSS feed</a>
+        </div>
+        <ol class="weekly-archive-list">
+          {allWeeklies.map((w) => (
+            <li>
+              <a href={weeklyHref(w)}>
+                <span class="weekly-archive-num">#{w.number}</span>
+                <div>
+                  <strong>{w.title}</strong>
+                  <small>
+                    <time datetime={w.weekOf}>{w.weekOf}</time>
+                    <span aria-hidden="true"> → </span>
+                    <time datetime={w.weekEnd}>{w.weekEnd}</time>
+                  </small>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  )}
 
   <section class="tracker-news-section">
     <div class="container">
@@ -210,7 +313,7 @@ const itemListSchema = {
         </details>
         <details class="tracker-faq">
           <summary>Can I use Claude or Perplexity in my car?</summary>
-          <p>Not confirmed. Neither has announced CarPlay or vehicle-native integration. See the <a href="/future-ai-assistants-in-cars/">future assistants status page</a> for the latest.</p>
+          <p>Not confirmed. Neither has announced CarPlay or vehicle-native integration. We will list any official statement here as soon as it appears.</p>
         </details>
         <details class="tracker-faq">
           <summary>Is Google built-in the same as Android Auto?</summary>

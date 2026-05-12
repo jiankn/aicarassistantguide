@@ -2,12 +2,16 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { pages } from './src/data/pages.ts';
+import { weeklyReports } from './src/data/weeklyReports.ts';
 
 const site = process.env.PUBLIC_SITE_URL || 'https://aicarassistantguide.com';
 const isoDateToUtc = (date) => new Date(`${date}T00:00:00.000Z`);
 const indexablePageDates = new Map([
   ['/', '2026-05-02'],
-  ...pages.map((page) => [`/${page.slug}/`, page.lastUpdated])
+  ...pages.map((page) => [`/${page.slug}/`, page.lastUpdated]),
+  ...weeklyReports
+    .filter((r) => !r.archived)
+    .map((r) => [`/weekly/${r.weekOf}/`, r.publishedAt])
 ]);
 const latestContentDate = Array.from(indexablePageDates.values()).sort().at(-1) || '2026-05-02';
 const sitemapExcludedPaths = new Set(['/contact/', '/privacy-policy/', '/terms/']);

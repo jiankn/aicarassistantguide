@@ -1,0 +1,312 @@
+---
+import { brandRules, verdictLabels, assistantLabels } from '../data/checkerRules';
+
+// Group rules for the select element
+const groupedBrands = brandRules.reduce<Record<string, typeof brandRules>>((acc, b) => {
+  if (!acc[b.group]) acc[b.group] = [];
+  acc[b.group].push(b);
+  return acc;
+}, {});
+
+// Inline data for client-side evaluator
+const inlineData = JSON.stringify({
+  brands: brandRules.map((b) => ({
+    brand: b.brand,
+    label: b.label,
+    models: b.models,
+    guideHref: b.guideHref,
+    evidenceNote: b.evidenceNote,
+    rules: {
+      'gemini': b.gemini,
+      'chatgpt': b.chatgpt,
+      'google-assistant': b.googleAssistant,
+      'siri': b.siri
+    }
+  })),
+  verdictLabels,
+  assistantLabels
+});
+
+const currentYear = new Date().getFullYear();
+---
+<section class="checker-tool" data-checker-tool aria-labelledby="checker-tool-heading">
+  <div class="container">
+    <div class="checker-tool-header">
+      <span class="eyebrow">Interactive checker</span>
+      <h2 id="checker-tool-heading">Does your car support these AI assistants?</h2>
+      <p class="checker-tool-lede">Pick your vehicle and year. We'll tell you which assistants work today, which are rolling out, and which are not supported — based on the latest official sources.</p>
+    </div>
+
+    <form class="checker-form" data-checker-form onsubmit="return false;">
+      <div class="checker-form-row">
+        <div class="checker-field checker-field-brand">
+          <label for="checker-brand">
+            <span class="checker-field-step">1</span>
+            <span>Your vehicle</span>
+          </label>
+          <div class="checker-select-wrap">
+            <select id="checker-brand" data-checker-brand required>
+              <option value="" disabled selected>Choose brand / family</option>
+              {Object.entries(groupedBrands).map(([group, items]) => (
+                <optgroup label={group}>
+                  {items.map((b) => (
+                    <option value={b.brand}>{b.label}</option>
+                  ))}
+                </optgroup>
+              ))}
+            </select>
+            <svg class="checker-select-caret" viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5 6 6.5l5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+
+        <div class="checker-field checker-field-year">
+          <label for="checker-year">
+            <span class="checker-field-step">2</span>
+            <span>Model year</span>
+          </label>
+          <div class="checker-stepper">
+            <button type="button" data-checker-year-step="-1" aria-label="Earlier year">−</button>
+            <input id="checker-year" type="number" data-checker-year inputmode="numeric" min="2010" max={currentYear + 1} step="1" value={currentYear} />
+            <button type="button" data-checker-year-step="1" aria-label="Later year">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="checker-field checker-field-assistants">
+        <span class="checker-field-label">
+          <span class="checker-field-step">3</span>
+          <span>Which assistants do you want to check?</span>
+        </span>
+        <div class="checker-assistants">
+          <label class="checker-pill">
+            <input type="checkbox" data-checker-assistant value="gemini" checked />
+            <span class="checker-pill-body">
+              <strong>Gemini</strong>
+              <small>Google's vehicle assistant</small>
+            </span>
+          </label>
+          <label class="checker-pill">
+            <input type="checkbox" data-checker-assistant value="chatgpt" checked />
+            <span class="checker-pill-body">
+              <strong>ChatGPT</strong>
+              <small>Via Apple CarPlay</small>
+            </span>
+          </label>
+          <label class="checker-pill">
+            <input type="checkbox" data-checker-assistant value="google-assistant" />
+            <span class="checker-pill-body">
+              <strong>Google Assistant</strong>
+              <small>Via Android Auto</small>
+            </span>
+          </label>
+          <label class="checker-pill">
+            <input type="checkbox" data-checker-assistant value="siri" />
+            <span class="checker-pill-body">
+              <strong>Siri</strong>
+              <small>Apple's CarPlay assistant</small>
+            </span>
+          </label>
+        </div>
+      </div>
+    </form>
+
+    <div class="checker-result" data-checker-result aria-live="polite">
+      <div class="checker-empty">
+        <p>👉 Choose your vehicle above to see results.</p>
+      </div>
+    </div>
+
+    <div class="checker-actions" data-checker-actions hidden>
+      <button type="button" data-checker-share class="checker-action-btn">
+        🔗 Copy shareable link
+      </button>
+      <a href="/contact/?subject=Checker%20result%20incorrect" class="checker-action-btn checker-action-secondary">
+        📨 Report incorrect result
+      </a>
+    </div>
+  </div>
+
+  <script type="application/json" data-checker-data set:html={inlineData}></script>
+
+  <script is:inline>
+    (function() {
+      const root = document.querySelector('[data-checker-tool]');
+      if (!root) return;
+      const dataEl = root.querySelector('[data-checker-data]');
+      if (!dataEl) return;
+      const DATA = JSON.parse(dataEl.textContent || '{}');
+
+      const brandSelect = root.querySelector('[data-checker-brand]');
+      const yearInput = root.querySelector('[data-checker-year]');
+      const assistantInputs = Array.from(root.querySelectorAll('[data-checker-assistant]'));
+      const resultEl = root.querySelector('[data-checker-result]');
+      const actionsEl = root.querySelector('[data-checker-actions]');
+      const shareBtn = root.querySelector('[data-checker-share]');
+
+      function escapeHtml(s) {
+        return String(s == null ? '' : s)
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      }
+
+      function getSelectedAssistants() {
+        return assistantInputs.filter((i) => i.checked).map((i) => i.value);
+      }
+
+      function evaluate(brandId, year, assistants) {
+        const b = DATA.brands.find((x) => x.brand === brandId);
+        if (!b) return null;
+        const results = assistants.map((a) => {
+          const r = b.rules[a];
+          if (!r) return null;
+          let verdict = r.baseVerdict;
+          if (r.yearMin && year < r.yearMin) {
+            verdict = 'no';
+          } else if (r.yearLikelyMin && year < r.yearLikelyMin) {
+            verdict = verdict === 'yes' ? 'maybe' : 'not-yet';
+          }
+          return {
+            assistant: a,
+            verdict: verdict,
+            headline: r.headline,
+            reasons: r.reasons || [],
+            checklist: r.checklist || [],
+            links: r.links || [],
+            sourceNote: r.sourceNote || ''
+          };
+        }).filter(Boolean);
+        return { brand: b, results: results };
+      }
+
+      function renderResult(out) {
+        if (!out) {
+          resultEl.innerHTML = '<div class="checker-empty"><p>👉 Choose your vehicle above to see results.</p></div>';
+          actionsEl.hidden = true;
+          return;
+        }
+        if (!out.results.length) {
+          resultEl.innerHTML = '<div class="checker-empty"><p>👉 Pick at least one assistant to check.</p></div>';
+          actionsEl.hidden = true;
+          return;
+        }
+
+        const evidenceLine = '<p class="checker-evidence">📋 <strong>Evidence:</strong> ' + escapeHtml(out.brand.evidenceNote) + '</p>';
+
+        const cards = out.results.map((r) => {
+          const meta = DATA.verdictLabels[r.verdict] || { label: r.verdict, color: '#64748b', desc: '' };
+          const assistantName = DATA.assistantLabels[r.assistant] || r.assistant;
+          const reasonsHtml = r.reasons.map((x) => '<li>' + escapeHtml(x) + '</li>').join('');
+          const checklistHtml = r.checklist.map((x) => '<li>' + escapeHtml(x) + '</li>').join('');
+          const linksHtml = r.links.map((l) => '<a href="' + escapeHtml(l.href) + '">' + escapeHtml(l.label) + ' →</a>').join('');
+          const sourceHtml = r.sourceNote ? '<p class="checker-source"><em>Source: ' + escapeHtml(r.sourceNote) + '</em></p>' : '';
+
+          return [
+            '<article class="checker-card" data-verdict="' + escapeHtml(r.verdict) + '">',
+            '  <header class="checker-card-head">',
+            '    <h3>' + escapeHtml(assistantName) + '</h3>',
+            '    <span class="checker-badge" style="--badge-color:' + escapeHtml(meta.color) + '">',
+            '      <strong>' + escapeHtml(meta.label) + '</strong>',
+            '      <small>' + escapeHtml(meta.desc) + '</small>',
+            '    </span>',
+            '  </header>',
+            '  <p class="checker-headline">' + escapeHtml(r.headline) + '</p>',
+            reasonsHtml ? '  <details open><summary>Why this verdict</summary><ul class="checker-reasons">' + reasonsHtml + '</ul></details>' : '',
+            checklistHtml ? '  <details><summary>Action checklist</summary><ol class="checker-checklist">' + checklistHtml + '</ol></details>' : '',
+            linksHtml ? '  <div class="checker-links">' + linksHtml + '</div>' : '',
+            sourceHtml,
+            '</article>'
+          ].join('');
+        }).join('');
+
+        resultEl.innerHTML = evidenceLine + '<div class="checker-cards">' + cards + '</div>';
+        actionsEl.hidden = false;
+      }
+
+      function updateUrl(brandId, year, assistants) {
+        const params = new URLSearchParams();
+        if (brandId) params.set('make', brandId);
+        if (year) params.set('year', String(year));
+        if (assistants.length) params.set('assistants', assistants.join(','));
+        const newHash = '#' + params.toString();
+        if (window.location.hash !== newHash) {
+          history.replaceState(null, '', newHash);
+        }
+      }
+
+      function readUrl() {
+        const raw = (window.location.hash || '').replace(/^#/, '');
+        const params = new URLSearchParams(raw);
+        return {
+          brand: params.get('make') || '',
+          year: parseInt(params.get('year') || '', 10),
+          assistants: (params.get('assistants') || '').split(',').filter(Boolean)
+        };
+      }
+
+      function run() {
+        const brandId = brandSelect.value;
+        const year = parseInt(yearInput.value, 10) || new Date().getFullYear();
+        const assistants = getSelectedAssistants();
+        if (!brandId) {
+          renderResult(null);
+          updateUrl('', 0, []);
+          return;
+        }
+        const out = evaluate(brandId, year, assistants);
+        renderResult(out);
+        updateUrl(brandId, year, assistants);
+      }
+
+      // Restore state from URL hash on load
+      const initial = readUrl();
+      if (initial.brand) {
+        const exists = Array.from(brandSelect.options).some((o) => o.value === initial.brand);
+        if (exists) brandSelect.value = initial.brand;
+      }
+      if (initial.year && initial.year >= 2010 && initial.year <= new Date().getFullYear() + 1) {
+        yearInput.value = String(initial.year);
+      }
+      if (initial.assistants.length) {
+        assistantInputs.forEach((i) => { i.checked = initial.assistants.indexOf(i.value) !== -1; });
+      }
+
+      brandSelect.addEventListener('change', run);
+      yearInput.addEventListener('change', run);
+      yearInput.addEventListener('input', run);
+      assistantInputs.forEach((i) => i.addEventListener('change', run));
+
+      // Year stepper buttons
+      root.querySelectorAll('[data-checker-year-step]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          const delta = parseInt(btn.getAttribute('data-checker-year-step') || '0', 10);
+          const min = parseInt(yearInput.min || '2010', 10);
+          const max = parseInt(yearInput.max || '2027', 10);
+          const current = parseInt(yearInput.value, 10) || new Date().getFullYear();
+          const next = Math.min(max, Math.max(min, current + delta));
+          yearInput.value = String(next);
+          run();
+        });
+      });
+
+      if (shareBtn) {
+        shareBtn.addEventListener('click', function() {
+          const url = window.location.href;
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(function() {
+              const original = shareBtn.textContent;
+              shareBtn.textContent = '✅ Link copied';
+              setTimeout(function() { shareBtn.textContent = original; }, 1800);
+            }).catch(function() {
+              window.prompt('Copy this link:', url);
+            });
+          } else {
+            window.prompt('Copy this link:', url);
+          }
+        });
+      }
+
+      // Initial render if URL had state
+      run();
+    })();
+  </script>
+</section>

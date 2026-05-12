@@ -11,7 +11,7 @@ export const contactEmail = 'corrections@aicarassistantguide.com';
 export const navItems = [
   { label: 'Find Support', href: '/compatibility-checker/' },
   { label: 'Fix Problems', href: '/why-is-gemini-not-showing-in-my-gm-car/' },
-  { label: 'Compare Assistants', href: '/best-ai-assistants-for-cars/' },
+  { label: 'Compare Assistants', href: '/gemini-vs-google-assistant-in-cars/' },
   { label: 'Track Updates', href: '/update-tracker/' }
 ];
 
@@ -22,7 +22,7 @@ export const navGroups = [
     links: [
       { label: 'Compatibility checker', href: '/compatibility-checker/' },
       { label: 'Model coverage hub', href: '/google-built-in-car-models/' },
-      { label: 'GM supported vehicles', href: '/gm-gemini-supported-vehicles/' },
+      { label: 'GM Gemini update', href: '/gm-gemini-update/' },
       { label: 'CarPlay requirements', href: '/chatgpt-carplay-requirements/' },
       { label: 'Android Auto AI', href: '/does-gemini-work-with-android-auto/' }
     ]
@@ -34,21 +34,19 @@ export const navGroups = [
       { label: 'Gemini not showing in GM', href: '/why-is-gemini-not-showing-in-my-gm-car/' },
       { label: 'Polestar Gemini not showing', href: '/polestar-gemini-not-showing/' },
       { label: 'ChatGPT CarPlay not showing', href: '/chatgpt-carplay-not-showing/' },
-      { label: 'ChatGPT not working', href: '/chatgpt-carplay-not-working/' },
-      { label: 'ChatGPT voice not working', href: '/chatgpt-carplay-voice-not-working/' }
+      { label: 'How to use ChatGPT in CarPlay', href: '/how-to-use-chatgpt-in-carplay/' },
+      { label: 'Voice assistant safety', href: '/ai-voice-assistant-safety-while-driving/' }
     ]
   },
   {
     label: 'Compare Assistants',
-    href: '/best-ai-assistants-for-cars/',
+    href: '/gemini-vs-google-assistant-in-cars/',
     links: [
-      { label: 'Best AI assistants for cars', href: '/best-ai-assistants-for-cars/' },
-      { label: 'Best AI assistants for CarPlay', href: '/best-ai-assistants-for-carplay/' },
       { label: 'Gemini vs Google Assistant', href: '/gemini-vs-google-assistant-in-cars/' },
       { label: 'ChatGPT vs Gemini in cars', href: '/chatgpt-carplay-vs-gemini-in-cars/' },
       { label: 'CarPlay vs Android Auto AI', href: '/carplay-vs-android-auto-ai-assistants/' },
       { label: 'ChatGPT vs Siri', href: '/chatgpt-carplay-vs-siri/' },
-      { label: 'Can ChatGPT replace Siri?', href: '/can-chatgpt-replace-siri-in-carplay/' }
+      { label: 'Google built-in vs Android Auto', href: '/google-built-in-vs-android-auto/' }
     ]
   },
   {
@@ -56,8 +54,8 @@ export const navGroups = [
     href: '/update-tracker/',
     links: [
       { label: 'Update tracker', href: '/update-tracker/' },
-      { label: 'Gemini Live status', href: '/gemini-live-in-car/' },
-      { label: 'Future AI assistants', href: '/future-ai-assistants-in-cars/' },
+      { label: 'GM Gemini update', href: '/gm-gemini-update/' },
+      { label: 'Polestar Gemini update', href: '/polestar-gemini-update/' },
       { label: 'Methodology', href: '/methodology/' },
       { label: 'Editorial policy', href: '/editorial-policy/' },
       { label: 'Safety guide', href: '/ai-voice-assistant-safety-while-driving/' }

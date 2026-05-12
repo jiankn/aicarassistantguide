@@ -1,0 +1,163 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import {
+  activeWeeklyReports,
+  confirmedUpdatesForWeek,
+  driverReportsForWeek,
+  weeklyHref,
+  type WeeklyReport
+} from '../../data/weeklyReports';
+import { reportCategoryLabel, reportCategoryTone, reportSourceLabel } from '../../data/driverReports';
+import { site } from '../../data/site';
+
+export function getStaticPaths() {
+  return activeWeeklyReports().map((report) => ({
+    params: { date: report.weekOf },
+    props: { report }
+  }));
+}
+
+interface Props {
+  report: WeeklyReport;
+}
+
+const { report } = Astro.props;
+const confirmed = confirmedUpdatesForWeek(report);
+const reports = driverReportsForWeek(report);
+const all = activeWeeklyReports();
+const currentIndex = all.findIndex((r) => r.weekOf === report.weekOf);
+const previous = currentIndex >= 0 && currentIndex < all.length - 1 ? all[currentIndex + 1] : null;
+const next = currentIndex > 0 ? all[currentIndex - 1] : null;
+
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || site.url;
+const canonical = new URL(weeklyHref(report), siteUrl).toString();
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'NewsArticle',
+  headline: report.title,
+  description: report.summary,
+  datePublished: report.publishedAt,
+  dateModified: report.publishedAt,
+  url: canonical,
+  author: { '@type': 'Organization', name: 'AI Car Assistant Guide Editorial Team' },
+  publisher: { '@type': 'Organization', name: site.name }
+};
+
+const description = `Weekly ${report.weekOf}–${report.weekEnd} digest of AI car assistant rollouts, driver reports, and what we are watching next.`;
+---
+<BaseLayout
+  title={`AI Car Assistant Weekly Update #${report.number}`}
+  description={description}
+  pathname={weeklyHref(report)}
+  ogType="article"
+  structuredData={articleSchema}
+>
+  <article class="weekly-report">
+    <header class="weekly-hero">
+      <div class="container weekly-hero-inner">
+        <p class="eyebrow">Weekly tracker · #{report.number}</p>
+        <h1>{report.title}</h1>
+        <p class="weekly-meta">
+          <time datetime={report.weekOf}>{report.weekOf}</time>
+          <span aria-hidden="true">→</span>
+          <time datetime={report.weekEnd}>{report.weekEnd}</time>
+          <span class="dot" aria-hidden="true">·</span>
+          <span>Published {report.publishedAt}</span>
+        </p>
+        <p class="weekly-summary">{report.summary}</p>
+        {report.editorNote && (
+          <p class="weekly-editor-note"><strong>Editor's note:</strong> {report.editorNote}</p>
+        )}
+      </div>
+    </header>
+
+    <section class="weekly-section">
+      <div class="container">
+        <h2>Confirmed updates this week</h2>
+        {confirmed.length === 0 ? (
+          <p class="weekly-empty">No new official confirmations from automakers, Google, OpenAI, or Apple this week. The previous week's items remain in effect.</p>
+        ) : (
+          <ol class="weekly-update-list">
+            {confirmed.map((u) => (
+              <li>
+                <div class="weekly-update-meta">
+                  <time datetime={u.date}>{u.date}</time>
+                  <span class={`confidence-badge confidence-${u.confidence}`}>{u.confidence}</span>
+                </div>
+                <h3><a href={u.relatedHref}>{u.title}</a></h3>
+                <p>{u.summary}</p>
+                <p class="weekly-impact"><strong>Impact:</strong> {u.impact}</p>
+              </li>
+            ))}
+          </ol>
+        )}
+      </div>
+    </section>
+
+    <section class="weekly-section weekly-section-soft">
+      <div class="container">
+        <h2>Driver-reported issues this week</h2>
+        {reports.length === 0 ? (
+          <div class="weekly-empty weekly-empty-card">
+            <p><strong>No driver reports logged for this week.</strong></p>
+            <p>This section pulls from public Reddit, X, and forum posts that include vehicle context. Reports start appearing in week 2.</p>
+            <p>If you have something to share: email <a href="mailto:corrections@aicarassistantguide.com">corrections@aicarassistantguide.com</a> with your brand, model, year, platform, and a public link.</p>
+          </div>
+        ) : (
+          <ul class="weekly-report-list">
+            {reports.map((r) => (
+              <li class={`weekly-report-card tone-${reportCategoryTone[r.category]}`}>
+                <div class="weekly-report-head">
+                  <span class="weekly-report-tag">{reportCategoryLabel[r.category]}</span>
+                  <time datetime={r.date}>{r.date}</time>
+                </div>
+                <h3>{r.brand}{r.model ? ` ${r.model}` : ''}{r.year ? ` (${r.year})` : ''}</h3>
+                <p>{r.summary}</p>
+                {r.quote && <blockquote>"{r.quote}"</blockquote>}
+                <p class="weekly-report-source">
+                  Source: <a href={r.sourceUrl} rel="noopener nofollow" target="_blank">{r.sourceLabel || reportSourceLabel[r.source]}</a>
+                  {r.resolved && r.resolution && <span class="weekly-report-resolved">· Resolved: {r.resolution}</span>}
+                </p>
+                {r.relatedHref && <a class="weekly-report-related" href={r.relatedHref}>Open related guide →</a>}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </section>
+
+    <section class="weekly-section">
+      <div class="container">
+        <h2>What we're watching next</h2>
+        <ul class="weekly-watch-list">
+          {report.watching.map((item) => (
+            <li>
+              <h3>{item.topic}</h3>
+              <p><strong>Why:</strong> {item.reason}</p>
+              {item.expectedSignal && <p><strong>Signal we'll look for:</strong> {item.expectedSignal}</p>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <nav class="weekly-pager" aria-label="Weekly report pagination">
+      <div class="container weekly-pager-inner">
+        {previous ? (
+          <a class="weekly-pager-link" href={weeklyHref(previous)} rel="prev">
+            <span>← Previous week</span>
+            <strong>#{previous.number} · {previous.weekOf}</strong>
+          </a>
+        ) : <span class="weekly-pager-spacer" />}
+        <a class="weekly-pager-home" href="/update-tracker/">Back to tracker</a>
+        {next ? (
+          <a class="weekly-pager-link weekly-pager-link-next" href={weeklyHref(next)} rel="next">
+            <span>Next week →</span>
+            <strong>#{next.number} · {next.weekOf}</strong>
+          </a>
+        ) : <span class="weekly-pager-spacer" />}
+      </div>
+    </nav>
+  </article>
+</BaseLayout>

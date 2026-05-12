@@ -111,7 +111,7 @@ const pageReviewDates: Record<string, string> = {
   'future-ai-assistants-in-cars': '2026-04-30',
   'best-ai-assistants-for-carplay': '2026-04-30',
   'best-ai-assistants-for-cars': '2026-04-30',
-  'update-tracker': '2026-05-02',
+  'update-tracker': '2026-05-12',
   'compatibility-checker': '2026-05-02',
   'does-gemini-require-google-built-in': '2026-05-03',
   'does-my-car-have-google-built-in': '2026-05-03',
@@ -2839,7 +2839,33 @@ function buildPage(brief: PageBrief): GuidePage {
   return { ...generated, ...p0Overrides[brief.slug] };
 }
 
-export const pages: GuidePage[] = pageBriefs.map(buildPage);
+// PRD v2 consolidation: these slugs no longer have static pages.
+// They 301 redirect via public/_redirects. We filter them out everywhere
+// they would otherwise produce broken or wasted internal links.
+export const removedSlugs = new Set([
+  // Phase 1: listicle / duplicate / officially-denied
+  'best-ai-assistants-for-carplay',
+  'best-ai-assistants-for-cars',
+  'gemini-carplay',
+  'chatgpt-carplay-not-working',
+  'chatgpt-carplay-voice-not-working',
+  'can-chatgpt-replace-siri-in-carplay',
+  'does-gemini-require-google-built-in',
+  'does-my-car-have-google-built-in',
+  'gemini-live-in-car',
+  'future-ai-assistants-in-cars',
+  'gm-gemini-supported-vehicles',
+  'google-built-in-gemini',
+  'how-to-enable-gemini-in-your-car',
+  // Phase 2: brand-specific Google-built-in pages merged into the model hub
+  'volvo-gemini-supported-models',
+  'honda-passport-gemini-google-built-in',
+  'lincoln-nautilus-gemini-google-built-in',
+  'renault-5-gemini-google-built-in'
+]);
+
+const allPages: GuidePage[] = pageBriefs.map(buildPage);
+export const pages: GuidePage[] = allPages.filter((page) => !removedSlugs.has(page.slug));
 export const articlePages = pages.filter((page) => !['compatibility-checker', 'update-tracker'].includes(page.slug));
 export const pageMap = new Map(pages.map((page) => [page.slug, page]));
 
@@ -2848,7 +2874,10 @@ export function getPage(slug: string): GuidePage | undefined {
 }
 
 export function getRelatedPages(page: GuidePage): GuidePage[] {
-  return page.relatedSlugs.map((slug) => pageMap.get(slug)).filter((item): item is GuidePage => Boolean(item));
+  return page.relatedSlugs
+    .filter((slug) => !removedSlugs.has(slug))
+    .map((slug) => pageMap.get(slug))
+    .filter((item): item is GuidePage => Boolean(item));
 }
 
 export function pagesByCluster(cluster: string): GuidePage[] {

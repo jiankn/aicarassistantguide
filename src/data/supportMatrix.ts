@@ -17,8 +17,8 @@ export const supportMatrix = [
     platform: 'Volvo with Google built-in',
     likelyAssistant: 'Gemini rolling out to named Volvo models',
     mustCheck: 'Official Volvo model list, US first wave, active internet, US English Google Account',
-    bestNextStep: 'Check Volvo Gemini supported models',
-    href: '/volvo-gemini-supported-models/'
+    bestNextStep: 'Check Volvo coverage in the model hub',
+    href: '/google-built-in-car-models/#us-popular-models'
   },
   {
     platform: 'Polestar with Google built-in',
@@ -31,22 +31,22 @@ export const supportMatrix = [
     platform: 'Honda Passport with Google built-in',
     likelyAssistant: 'Gemini candidate path through vehicle-native Google built-in',
     mustCheck: '2026 Passport, trim/market, Google built-in, software, account, rollout timing',
-    bestNextStep: 'Check Honda Passport Gemini guide',
-    href: '/honda-passport-gemini-google-built-in/'
+    bestNextStep: 'Check Honda Passport coverage in the model hub',
+    href: '/google-built-in-car-models/#us-popular-models'
   },
   {
     platform: 'Lincoln Nautilus Digital Experience',
     likelyAssistant: 'Gemini candidate path through Google apps and services',
     mustCheck: 'Nautilus model year, Lincoln Digital Experience, Google services, language, rollout timing',
-    bestNextStep: 'Check Lincoln Nautilus Gemini guide',
-    href: '/lincoln-nautilus-gemini-google-built-in/'
+    bestNextStep: 'Check Lincoln Nautilus coverage in the model hub',
+    href: '/google-built-in-car-models/#us-popular-models'
   },
   {
     platform: 'Renault 5 openR link',
     likelyAssistant: 'Gemini candidate path through openR link with Google built-in',
     mustCheck: 'Renault 5 E-Tech, openR link, connected services, data access, rollout timing',
-    bestNextStep: 'Check Renault 5 Gemini guide',
-    href: '/renault-5-gemini-google-built-in/'
+    bestNextStep: 'Check Renault 5 coverage in the model hub',
+    href: '/google-built-in-car-models/#us-popular-models'
   },
   {
     platform: 'iPhone with CarPlay',

@@ -177,7 +177,11 @@ if (!fs.existsSync(dist)) {
     titles.set(title, (titles.get(title) || 0) + 1);
     docs.push({ route, words: visibleWords(html) });
 
-    for (const match of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
+    const linkScanHtml = html
+      .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+      .replace(/<style[\s\S]*?<\/style>/gi, ' ');
+
+    for (const match of linkScanHtml.matchAll(/(?:href|src)="([^"]+)"/g)) {
       const target = normalizeRoute(match[1], route);
       if (!target) continue;
       if (target.asset && !assetPaths.has(target.asset)) fail(`${route} references missing asset ${target.asset}`);

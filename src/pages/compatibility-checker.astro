@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import VehicleGuideFinder from '../components/VehicleGuideFinder.astro';
+import CompatibilityCheckerTool from '../components/CompatibilityCheckerTool.astro';
 import { supportMatrix, comparisonRows } from '../data/supportMatrix';
 import { getPage } from '../data/pages';
 import { site } from '../data/site';
@@ -117,6 +118,8 @@ const howToSchema = {
       </aside>
     </div>
   </section>
+
+  <CompatibilityCheckerTool />
 
   <section class="compatibility-decision-tool" aria-labelledby="decision-tool-heading">
     <div class="container">
@@ -286,7 +289,7 @@ const howToSchema = {
           <span>Feature comparison</span>
           <h2>How AI assistant features differ by platform</h2>
         </div>
-        <a href="/best-ai-assistants-for-cars/">Full comparison guide</a>
+        <a href="/gemini-vs-google-assistant-in-cars/">Full comparison guide</a>
       </div>
       <div class="table-wrap">
         <table class="matrix">
@@ -319,7 +322,7 @@ const howToSchema = {
       <div class="tracker-faq-grid">
         <details class="tracker-faq">
           <summary>Does my car support Gemini?</summary>
-          <p>Only if it has Google built-in and the automaker has rolled out the update in your region. Start with <a href="/google-built-in-car-models/">Google built-in car models</a>, then use <a href="/gm-gemini-update/">GM Gemini</a>, <a href="/volvo-gemini-supported-models/">Volvo Gemini</a>, or <a href="/polestar-gemini-update/">Polestar Gemini</a> for specific eligibility checks.</p>
+          <p>Only if it has Google built-in and the automaker has rolled out the update in your region. Start with <a href="/google-built-in-car-models/">Google built-in car models</a>, then use <a href="/gm-gemini-update/">GM Gemini</a>, <a href="/google-built-in-car-models/#us-popular-models">Volvo Gemini</a>, or <a href="/polestar-gemini-update/">Polestar Gemini</a> for specific eligibility checks.</p>
         </details>
         <details class="tracker-faq">
           <summary>Can I use ChatGPT in my car?</summary>
@@ -331,11 +334,11 @@ const howToSchema = {
         </details>
         <details class="tracker-faq">
           <summary>Which AI assistant is best for my car?</summary>
-          <p>It depends on your platform. Google built-in vehicles → Gemini. iPhone + CarPlay → ChatGPT + Siri. Android Auto → Google Assistant. See <a href="/best-ai-assistants-for-cars/">the decision matrix</a>.</p>
+          <p>It depends on your platform. Google built-in vehicles → Gemini. iPhone + CarPlay → ChatGPT + Siri. Android Auto → Google Assistant. See <a href="/gemini-vs-google-assistant-in-cars/">the decision matrix</a>.</p>
         </details>
         <details class="tracker-faq">
           <summary>Can I use Claude or Perplexity in my car?</summary>
-          <p>Not confirmed for any vehicle or CarPlay integration. See <a href="/future-ai-assistants-in-cars/">future assistant status</a>.</p>
+          <p>Not confirmed for any vehicle or CarPlay integration. Check the <a href="/update-tracker/">update tracker</a> for the latest status.</p>
         </details>
         <details class="tracker-faq">
           <summary>Does this tool collect my vehicle data?</summary>
